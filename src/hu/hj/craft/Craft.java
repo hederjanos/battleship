@@ -2,6 +2,7 @@ package hu.hj.craft;
 
 import hu.hj.coordinate.Coordinate;
 import hu.hj.coordinate.CoordinateFactory;
+import hu.hj.exceptions.CoordinateAlreadyHitException;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -45,14 +46,14 @@ public abstract class Craft {
         return absoluteCoordinates;
     }
 
-    protected boolean hit(Coordinate coordinate) {
+    protected boolean hit(Coordinate coordinate) throws CoordinateAlreadyHitException {
         Set<Coordinate> absoluteCoordinates = getAbsoluteCoordinates();
         if (absoluteCoordinates.contains(coordinate)) {
             Coordinate internalCoordinate = coordinate.subtract(anchorCoordinate.subtract(internalAnchorCoordinate));
             int i = internalCoordinate.getY();
             int j = internalCoordinate.getX();
             if (shape[i][j] == HIT_VALUE) {
-                System.out.println("ALREADY HIT");
+                throw new CoordinateAlreadyHitException(coordinate);
             } else {
                 shape[i][j] = HIT_VALUE;
                 return true;

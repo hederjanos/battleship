@@ -3,6 +3,7 @@ package hu.hj.craft;
 import hu.hj.coordinate.Coordinate;
 import hu.hj.coordinate.CoordinateFactory;
 import hu.hj.craft.ships.Carrier;
+import hu.hj.exceptions.CoordinateAlreadyHitException;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
@@ -61,7 +62,11 @@ class CraftTest {
         carrier = new Carrier(Orientation.NORTH);
         Coordinate anchorCoordinate = CoordinateFactory.createCoordinate(2, 2);
         carrier.setAnchorCoordinate(anchorCoordinate);
-        assertTrue(carrier.hit(CoordinateFactory.createCoordinate(2, 3)));
+        try {
+            assertTrue(carrier.hit(CoordinateFactory.createCoordinate(2, 3)));
+        } catch (CoordinateAlreadyHitException e) {
+            e.printStackTrace();
+        }
 
         int[][] expectedShape =
                 {
@@ -79,11 +84,15 @@ class CraftTest {
         carrier = new Carrier(Orientation.NORTH);
         Coordinate anchorCoordinate = CoordinateFactory.createCoordinate(2, 2);
         carrier.setAnchorCoordinate(anchorCoordinate);
-        assertTrue(carrier.hit(CoordinateFactory.createCoordinate(2, 3)));
-        assertTrue(carrier.hit(CoordinateFactory.createCoordinate(2, 4)));
-        assertTrue(carrier.hit(CoordinateFactory.createCoordinate(2, 5)));
-        assertTrue(carrier.hit(CoordinateFactory.createCoordinate(2, 6)));
-        assertTrue(carrier.hit(CoordinateFactory.createCoordinate(2, 2)));
+        try {
+            assertTrue(carrier.hit(CoordinateFactory.createCoordinate(2, 3)));
+            assertTrue(carrier.hit(CoordinateFactory.createCoordinate(2, 4)));
+            assertTrue(carrier.hit(CoordinateFactory.createCoordinate(2, 5)));
+            assertTrue(carrier.hit(CoordinateFactory.createCoordinate(2, 6)));
+            assertTrue(carrier.hit(CoordinateFactory.createCoordinate(2, 2)));
+        } catch (CoordinateAlreadyHitException e) {
+            e.printStackTrace();
+        }
 
         int[][] expectedShape =
                 {
@@ -101,8 +110,12 @@ class CraftTest {
         carrier = new Carrier(Orientation.NORTH);
         Coordinate anchorCoordinate = CoordinateFactory.createCoordinate(2, 2);
         carrier.setAnchorCoordinate(anchorCoordinate);
-        assertTrue(carrier.hit(CoordinateFactory.createCoordinate(2, 3)));
-        assertFalse(carrier.hit(CoordinateFactory.createCoordinate(2, 3)));
+        try {
+            assertTrue(carrier.hit(CoordinateFactory.createCoordinate(2, 3)));
+        } catch (CoordinateAlreadyHitException e) {
+            e.printStackTrace();
+        }
+        assertThrows(CoordinateAlreadyHitException.class, () -> carrier.hit(CoordinateFactory.createCoordinate(2, 3)));
 
         int[][] expectedShape =
                 {
@@ -120,7 +133,11 @@ class CraftTest {
         carrier = new Carrier(Orientation.NORTH);
         Coordinate anchorCoordinate = CoordinateFactory.createCoordinate(2, 2);
         carrier.setAnchorCoordinate(anchorCoordinate);
-        assertFalse(carrier.hit(CoordinateFactory.createCoordinate(1, 1)));
+        try {
+            assertFalse(carrier.hit(CoordinateFactory.createCoordinate(1, 1)));
+        } catch (CoordinateAlreadyHitException e) {
+            e.printStackTrace();
+        }
 
         int[][] expectedShape =
                 {
@@ -138,7 +155,11 @@ class CraftTest {
         carrier = new Carrier(Orientation.NORTH);
         Coordinate anchorCoordinate = CoordinateFactory.createCoordinate(2, 2);
         carrier.setAnchorCoordinate(anchorCoordinate);
-        carrier.hit(CoordinateFactory.createCoordinate(2, 5));
+        try {
+            carrier.hit(CoordinateFactory.createCoordinate(2, 5));
+        } catch (CoordinateAlreadyHitException e) {
+            e.printStackTrace();
+        }
         assertTrue(carrier.isHit(CoordinateFactory.createCoordinate(2, 5)));
     }
 
@@ -155,11 +176,15 @@ class CraftTest {
         carrier = new Carrier(Orientation.NORTH);
         Coordinate anchorCoordinate = CoordinateFactory.createCoordinate(2, 2);
         carrier.setAnchorCoordinate(anchorCoordinate);
-        carrier.hit(CoordinateFactory.createCoordinate(2, 2));
-        carrier.hit(CoordinateFactory.createCoordinate(2, 3));
-        carrier.hit(CoordinateFactory.createCoordinate(2, 4));
-        carrier.hit(CoordinateFactory.createCoordinate(2, 5));
-        carrier.hit(CoordinateFactory.createCoordinate(2, 6));
+        try {
+            carrier.hit(CoordinateFactory.createCoordinate(2, 2));
+            carrier.hit(CoordinateFactory.createCoordinate(2, 3));
+            carrier.hit(CoordinateFactory.createCoordinate(2, 4));
+            carrier.hit(CoordinateFactory.createCoordinate(2, 5));
+            carrier.hit(CoordinateFactory.createCoordinate(2, 6));
+        } catch (CoordinateAlreadyHitException e) {
+            e.printStackTrace();
+        }
         assertTrue(carrier.isShotDown());
     }
 
@@ -168,10 +193,14 @@ class CraftTest {
         carrier = new Carrier(Orientation.NORTH);
         Coordinate anchorCoordinate = CoordinateFactory.createCoordinate(2, 2);
         carrier.setAnchorCoordinate(anchorCoordinate);
-        carrier.hit(CoordinateFactory.createCoordinate(2, 2));
-        carrier.hit(CoordinateFactory.createCoordinate(2, 3));
-        carrier.hit(CoordinateFactory.createCoordinate(2, 4));
-        carrier.hit(CoordinateFactory.createCoordinate(2, 5));
+        try {
+            carrier.hit(CoordinateFactory.createCoordinate(2, 2));
+            carrier.hit(CoordinateFactory.createCoordinate(2, 3));
+            carrier.hit(CoordinateFactory.createCoordinate(2, 4));
+            carrier.hit(CoordinateFactory.createCoordinate(2, 5));
+        } catch (CoordinateAlreadyHitException e) {
+            e.printStackTrace();
+        }
         assertFalse(carrier.isShotDown());
     }
 }
