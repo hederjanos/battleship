@@ -16,7 +16,7 @@ public class Submarine extends Sub {
             };
 
     public Submarine(Orientation orientation) {
-        super(orientation);
+        super(orientation, SYMBOL);
         setShape(CraftUtilities.getOrientedShape(SHIP_SHAPE, orientation));
         setInternalAnchorCoordinate();
     }

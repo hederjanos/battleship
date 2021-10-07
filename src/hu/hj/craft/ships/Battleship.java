@@ -16,7 +16,7 @@ public class Battleship extends Ship {
             };
 
     public Battleship(Orientation orientation) {
-        super(orientation);
+        super(orientation, SYMBOL);
         setShape(CraftUtilities.getOrientedShape(SHIP_SHAPE, orientation));
         setInternalAnchorCoordinate();
     }

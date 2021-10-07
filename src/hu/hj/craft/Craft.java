@@ -14,19 +14,21 @@ public abstract class Craft {
     protected static final int ANCHOR_VALUE = 2;
 
     protected final Orientation orientation;
+    protected final char symbol;
     protected int[][] shape;
     protected Coordinate internalAnchorCoordinate;
     protected Coordinate anchorCoordinate;
 
-    protected Craft(Orientation orientation) {
+    protected Craft(Orientation orientation, char symbol) {
         this.orientation = orientation;
+        this.symbol = symbol;
     }
 
-    protected Set<Coordinate> getAbsoluteCoordinates() {
+    public Set<Coordinate> getAbsoluteCoordinates() {
         return getAbsoluteCoordinates(anchorCoordinate);
     }
 
-    protected Set<Coordinate> getAbsoluteCoordinates(Coordinate coordinate) {
+    public Set<Coordinate> getAbsoluteCoordinates(Coordinate coordinate) {
         if (coordinate == null) {
             throw new IllegalArgumentException();
         }
@@ -46,7 +48,7 @@ public abstract class Craft {
         return absoluteCoordinates;
     }
 
-    protected boolean hit(Coordinate coordinate) throws CoordinateAlreadyHitException {
+    public boolean hit(Coordinate coordinate) throws CoordinateAlreadyHitException {
         Set<Coordinate> absoluteCoordinates = getAbsoluteCoordinates();
         if (absoluteCoordinates.contains(coordinate)) {
             Coordinate internalCoordinate = coordinate.subtract(anchorCoordinate.subtract(internalAnchorCoordinate));
@@ -76,7 +78,7 @@ public abstract class Craft {
         return isHit;
     }
 
-    protected boolean isShotDown() {
+    public boolean isShotDown() {
         boolean isShotDown = true;
         Set<Coordinate> absoluteCoordinates = getAbsoluteCoordinates();
         for (Coordinate coordinate : absoluteCoordinates) {
@@ -91,11 +93,15 @@ public abstract class Craft {
         return isShotDown;
     }
 
-    public Orientation getOrientation() {
+    protected Orientation getOrientation() {
         return orientation;
     }
 
-    public int[][] getShape() {
+    public char getSymbol() {
+        return symbol;
+    }
+
+    protected int[][] getShape() {
         return shape;
     }
 
@@ -107,7 +113,7 @@ public abstract class Craft {
         return coordinate;
     }
 
-    public void setShape(int[][] shape) {
+    protected void setShape(int[][] shape) {
         this.shape = shape;
     }
 

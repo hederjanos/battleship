@@ -5,7 +5,7 @@ import hu.hj.craft.Orientation;
 
 public abstract class Ship extends Craft {
 
-    protected Ship(Orientation orientation) {
-        super(orientation);
+    protected Ship(Orientation orientation, char symbol) {
+        super(orientation, symbol);
     }
 }

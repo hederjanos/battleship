@@ -5,7 +5,7 @@ import hu.hj.craft.Orientation;
 
 public abstract class Sub extends Craft {
 
-    protected Sub(Orientation orientation) {
-        super(orientation);
+    protected Sub(Orientation orientation, char symbol) {
+        super(orientation, symbol);
     }
 }
