@@ -4,7 +4,7 @@ import hu.hj.craft.ships.*;
 import hu.hj.craft.subs.Submarine;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CraftFactoryTest {
 
@@ -23,5 +23,15 @@ class CraftFactoryTest {
             craft = CraftFactory.createCraft("sub", "Submarine", orientation);
             assertTrue(craft instanceof Submarine);
         }
+    }
+
+    @Test
+    void testCreateCraftWithNotExistingClass() {
+        assertNull(CraftFactory.createCraft("aircraft", "Bomber", Orientation.EAST));
+    }
+
+    @Test
+    void testCreateCraftWithNotExistingClass2() {
+        assertNull(CraftFactory.createCraft("ship", "Destroyer*", Orientation.EAST));
     }
 }
