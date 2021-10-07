@@ -1,4 +1,4 @@
-package hu.hj.crafts;
+package hu.hj.craft;
 
 public class CraftUtilities {
 

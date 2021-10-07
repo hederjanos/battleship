@@ -1,7 +1,7 @@
-package hu.hj.crafts.ships;
+package hu.hj.craft.ships;
 
-import hu.hj.crafts.CraftUtilities;
-import hu.hj.crafts.Orientation;
+import hu.hj.craft.CraftUtilities;
+import hu.hj.craft.Orientation;
 
 public class Cruiser extends Ship {
 

@@ -1,8 +1,8 @@
-package hu.hj.crafts;
+package hu.hj.craft;
 
 import hu.hj.coordinate.Coordinate;
 import hu.hj.coordinate.CoordinateFactory;
-import hu.hj.crafts.ships.Carrier;
+import hu.hj.craft.ships.Carrier;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;

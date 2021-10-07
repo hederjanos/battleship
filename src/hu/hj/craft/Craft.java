@@ -1,4 +1,4 @@
-package hu.hj.crafts;
+package hu.hj.craft;
 
 import hu.hj.coordinate.Coordinate;
 import hu.hj.coordinate.CoordinateFactory;
@@ -89,8 +89,6 @@ public abstract class Craft {
         }
         return isShotDown;
     }
-
-
 
     public Orientation getOrientation() {
         return orientation;

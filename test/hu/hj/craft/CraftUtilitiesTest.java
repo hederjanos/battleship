@@ -1,4 +1,4 @@
-package hu.hj.crafts;
+package hu.hj.craft;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
