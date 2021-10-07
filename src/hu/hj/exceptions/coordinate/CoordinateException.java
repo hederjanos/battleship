@@ -1,6 +1,7 @@
-package hu.hj.exceptions;
+package hu.hj.exceptions.coordinate;
 
 import hu.hj.coordinate.Coordinate;
+import hu.hj.exceptions.BattleshipException;
 
 public abstract class CoordinateException extends BattleshipException {
 

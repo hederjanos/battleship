@@ -1,10 +1,13 @@
 package hu.hj.coordinate;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class Coordinate {
+public class Coordinate implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private int x;
     private int y;

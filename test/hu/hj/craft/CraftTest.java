@@ -3,7 +3,7 @@ package hu.hj.craft;
 import hu.hj.coordinate.Coordinate;
 import hu.hj.coordinate.CoordinateFactory;
 import hu.hj.craft.ships.Carrier;
-import hu.hj.exceptions.CoordinateAlreadyHitException;
+import hu.hj.exceptions.coordinate.CoordinateAlreadyHitException;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;

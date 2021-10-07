@@ -2,7 +2,7 @@ package hu.hj.craft;
 
 import hu.hj.coordinate.Coordinate;
 import hu.hj.coordinate.CoordinateFactory;
-import hu.hj.exceptions.CoordinateAlreadyHitException;
+import hu.hj.exceptions.coordinate.CoordinateAlreadyHitException;
 
 import java.util.HashSet;
 import java.util.Set;
