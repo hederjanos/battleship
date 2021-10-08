@@ -1,5 +1,7 @@
 package hu.hj.craft;
 
+import hu.hj.constants.Orientation;
+
 public class CraftUtilities {
 
     private CraftUtilities() {

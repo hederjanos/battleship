@@ -1,14 +1,12 @@
 package hu.hj.board;
 
+import hu.hj.constants.ShotStatus;
 import hu.hj.coordinate.Coordinate;
 import hu.hj.craft.Craft;
 import hu.hj.exceptions.coordinate.CoordinateAlreadyHitException;
 import hu.hj.exceptions.coordinate.InvalidCoordinateException;
 import hu.hj.exceptions.coordinate.NextToAnotherException;
 import hu.hj.exceptions.coordinate.OccupiedCoordinateException;
-import hu.hj.printer.AbstractPrinter;
-import hu.hj.printer.FancyBoardPrinter;
-import hu.hj.printer.SimpleBoardPrinter;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,12 +15,28 @@ import java.util.Set;
 
 public class SimpleBoard implements Board {
 
-    public static final int SIZE = 10;
+    private static final int MAX_BOARD_SIZE = 20;
+    private static final int MIN_BOARD_SIZE = 5;
 
-    private final Map<Coordinate, Craft> battlefield = new HashMap<>();
-    protected final Set<Coordinate> seenCoordinates = new HashSet<>();
+    private final Map<Coordinate, Craft> battlefield;
+    protected final Set<Coordinate> seenCoordinates;
+    private final int size;
     private int numberOfCrafts;
     private int destroyedCrafts;
+
+    public SimpleBoard() {
+        this(10);
+    }
+
+    public SimpleBoard(int size) {
+        if (size < MIN_BOARD_SIZE || size > MAX_BOARD_SIZE) {
+            throw new IllegalArgumentException("Invalid board size: " + size + ". The size of board must be between 5 and 20!");
+        } else {
+            this.size = size;
+        }
+        this.battlefield = new HashMap<>();
+        this.seenCoordinates = new HashSet<>();
+    }
 
     public boolean addCraft(Craft craft, Coordinate possibleAnchorCoordinate)
             throws InvalidCoordinateException, OccupiedCoordinateException, NextToAnotherException {
@@ -53,7 +67,7 @@ public class SimpleBoard implements Board {
     private boolean checkCoordinate(Coordinate coordinate) {
         int x = coordinate.getX();
         int y = coordinate.getY();
-        return (x >= 0 && x < SIZE && y >= 0 && y < SIZE);
+        return (x >= 0 && x < size && y >= 0 && y < size);
     }
 
     private void checkCraftNeighbourhood(Craft craft, Coordinate possibleAnchorCoordinate) throws NextToAnotherException {
@@ -66,20 +80,20 @@ public class SimpleBoard implements Board {
     }
 
     private void addCraftToBattlefield(Craft craft, Set<Coordinate> craftPossibleCoordinates) {
-        this.numberOfCrafts++;
         for (Coordinate coordinate : craftPossibleCoordinates) {
-            this.battlefield.put(coordinate, craft);
+            battlefield.put(coordinate, craft);
         }
+        numberOfCrafts++;
     }
 
     public Craft getCraft(Coordinate coordinate) {
         if (battlefield.containsKey(coordinate)) {
-            return this.battlefield.get(coordinate);
+            return battlefield.get(coordinate);
         }
         return null;
     }
 
-    public Set<Coordinate> getNeighbourhood(Craft craft) {
+    private Set<Coordinate> getNeighbourhood(Craft craft) {
         return getNeighbourhood(craft, craft.getAnchorCoordinate());
     }
 
@@ -129,7 +143,7 @@ public class SimpleBoard implements Board {
                 seenCoordinates.add(neighbourCoordinate);
             }
         }
-        this.destroyedCrafts++;
+        destroyedCrafts++;
     }
 
     public boolean isSeen(Coordinate coordinate) {
@@ -137,17 +151,14 @@ public class SimpleBoard implements Board {
     }
 
     public int getSize() {
-        return SIZE;
+        return size;
     }
 
     public boolean areAllCraftsDestroyed() {
         return numberOfCrafts == destroyedCrafts;
     }
 
-    public void show(boolean unveil) {
-        AbstractPrinter printer = new SimpleBoardPrinter(this, unveil);
-        printer.print();
-        printer = new FancyBoardPrinter(this, unveil);
-        printer.print();
+    public String toString(boolean unveil) {
+        return new SimpleBoardStringBuilder(this, unveil).getStringBoard();
     }
 }

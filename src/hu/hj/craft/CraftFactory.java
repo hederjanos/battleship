@@ -1,5 +1,6 @@
 package hu.hj.craft;
 
+import hu.hj.constants.Orientation;
 import hu.hj.craft.ships.Ship;
 import hu.hj.craft.subs.Sub;
 

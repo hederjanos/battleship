@@ -1,5 +1,6 @@
 package hu.hj.craft;
 
+import hu.hj.constants.Orientation;
 import hu.hj.craft.ships.*;
 import hu.hj.craft.subs.Submarine;
 import org.junit.jupiter.api.Test;

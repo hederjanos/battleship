@@ -1,11 +1,12 @@
 package hu.hj.craft.ships;
 
+import hu.hj.constants.Orientation;
+import hu.hj.constants.Symbol;
 import hu.hj.craft.CraftUtilities;
-import hu.hj.craft.Orientation;
 
 public class Battleship extends Ship {
 
-    public static final char SYMBOL = 'O';
+    private static final Symbol SYMBOL = Symbol.BATTLESHIP;
     private static final int[][] SHIP_SHAPE =
             {
                     {0, 0, 2, 0, 0},

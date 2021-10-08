@@ -1,5 +1,7 @@
 package hu.hj.coordinate;
 
+import hu.hj.constants.Direction;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;

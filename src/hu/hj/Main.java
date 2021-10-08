@@ -2,11 +2,14 @@ package hu.hj;
 
 import hu.hj.board.Board;
 import hu.hj.board.SimpleBoard;
+import hu.hj.board.printer.FancyBoardPrinter;
+import hu.hj.board.printer.RawBoardPrinter;
+import hu.hj.board.printer.SimpleBoardPrinter;
 import hu.hj.coordinate.Coordinate;
 import hu.hj.coordinate.CoordinateFactory;
 import hu.hj.craft.Craft;
 import hu.hj.craft.CraftFactory;
-import hu.hj.craft.Orientation;
+import hu.hj.constants.Orientation;
 import hu.hj.exceptions.coordinate.CoordinateAlreadyHitException;
 import hu.hj.exceptions.coordinate.InvalidCoordinateException;
 import hu.hj.exceptions.coordinate.NextToAnotherException;
@@ -45,7 +48,19 @@ public class Main {
         } catch (InvalidCoordinateException | CoordinateAlreadyHitException e) {
             e.printStackTrace();
         }
-        board.show(true);
-        board.show(false);
+
+        SimpleBoardPrinter printer = new FancyBoardPrinter(board.toString(true), board.getSize());
+        printer.print();
+
+        printer = new RawBoardPrinter(board.toString(true), board.getSize());
+        printer.print();
+
+        printer = new FancyBoardPrinter(board.toString(false), board.getSize());
+        printer.print();
+
+        printer = new RawBoardPrinter(board.toString(false), board.getSize());
+        printer.print();
+
+
     }
 }

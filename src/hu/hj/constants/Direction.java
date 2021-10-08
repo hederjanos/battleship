@@ -1,4 +1,4 @@
-package hu.hj.coordinate;
+package hu.hj.constants;
 
 public enum Direction {
     UP(0, -1),

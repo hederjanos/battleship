@@ -1,6 +1,9 @@
 package hu.hj.craft.fleet;
 
-import hu.hj.craft.ships.*;
+import hu.hj.craft.ships.Battleship;
+import hu.hj.craft.ships.Carrier;
+import hu.hj.craft.ships.Cruiser;
+import hu.hj.craft.ships.Destroyer;
 import hu.hj.craft.subs.Submarine;
 
 import java.util.HashMap;

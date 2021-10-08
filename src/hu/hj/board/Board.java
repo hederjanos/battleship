@@ -1,5 +1,6 @@
 package hu.hj.board;
 
+import hu.hj.constants.ShotStatus;
 import hu.hj.coordinate.Coordinate;
 import hu.hj.craft.Craft;
 import hu.hj.exceptions.coordinate.CoordinateAlreadyHitException;
@@ -18,7 +19,7 @@ public interface Board {
 
     boolean areAllCraftsDestroyed();
 
-    void show(boolean unveil);
+    String toString(boolean unveil);
 
     int getSize();
 

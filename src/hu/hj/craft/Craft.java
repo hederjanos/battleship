@@ -1,5 +1,7 @@
 package hu.hj.craft;
 
+import hu.hj.constants.Orientation;
+import hu.hj.constants.Symbol;
 import hu.hj.coordinate.Coordinate;
 import hu.hj.coordinate.CoordinateFactory;
 import hu.hj.exceptions.coordinate.CoordinateAlreadyHitException;
@@ -9,17 +11,17 @@ import java.util.Set;
 
 public abstract class Craft {
 
-    protected static final int HIT_VALUE = -1;
-    protected static final int CRAFT_VALUE = 1;
-    protected static final int ANCHOR_VALUE = 2;
+    private static final int HIT_VALUE = -1;
+    private static final int CRAFT_VALUE = 1;
+    private static final int ANCHOR_VALUE = 2;
 
     protected final Orientation orientation;
-    protected final char symbol;
+    protected final Symbol symbol;
     protected int[][] shape;
     protected Coordinate internalAnchorCoordinate;
     protected Coordinate anchorCoordinate;
 
-    protected Craft(Orientation orientation, char symbol) {
+    protected Craft(Orientation orientation, Symbol symbol) {
         this.orientation = orientation;
         this.symbol = symbol;
     }
@@ -97,12 +99,16 @@ public abstract class Craft {
         return orientation;
     }
 
-    public char getSymbol() {
+    public Symbol getSymbol() {
         return symbol;
     }
 
     protected int[][] getShape() {
         return shape;
+    }
+
+    public Coordinate getInternalAnchorCoordinate() {
+        return internalAnchorCoordinate;
     }
 
     public Coordinate getAnchorCoordinate() {

@@ -1,9 +1,11 @@
 package hu.hj.craft;
 
+import hu.hj.constants.Orientation;
 import hu.hj.coordinate.Coordinate;
 import hu.hj.coordinate.CoordinateFactory;
 import hu.hj.craft.ships.Carrier;
 import hu.hj.exceptions.coordinate.CoordinateAlreadyHitException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
@@ -13,18 +15,46 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CraftTest {
 
-    private Carrier carrier;
+    private Craft carrier;
+
+    @BeforeEach
+    void setUp() {
+        carrier = new Carrier(Orientation.NORTH);
+    }
+
+    @Test
+    void testConstruction() {
+        for (Orientation orientation : Orientation.values()) {
+            carrier = new Carrier(orientation);
+            switch (orientation) {
+                case SOUTH:
+                    assertEquals(Orientation.SOUTH, carrier.getOrientation());
+                    assertEquals(CoordinateFactory.createCoordinate(2, 4), carrier.getInternalAnchorCoordinate());
+                    break;
+                case NORTH:
+                    assertEquals(Orientation.NORTH, carrier.getOrientation());
+                    assertEquals(CoordinateFactory.createCoordinate(2, 0), carrier.getInternalAnchorCoordinate());
+                    break;
+                case EAST:
+                    assertEquals(Orientation.EAST, carrier.getOrientation());
+                    assertEquals(CoordinateFactory.createCoordinate(4, 2), carrier.getInternalAnchorCoordinate());
+                    break;
+                case WEST:
+                    assertEquals(Orientation.WEST, carrier.getOrientation());
+                    assertEquals(CoordinateFactory.createCoordinate(0, 2), carrier.getInternalAnchorCoordinate());
+                    break;
+            }
+        }
+    }
 
     @Test
     void testGetAbsolutPositions() {
-        carrier = new Carrier(Orientation.NORTH);
         assertThrows(IllegalArgumentException.class, () -> carrier.getAbsoluteCoordinates(null));
         assertNull(carrier.getAnchorCoordinate());
     }
 
     @Test
     void testGetAbsolutPositionsInBound() {
-        carrier = new Carrier(Orientation.NORTH);
         Coordinate anchorCoordinate = CoordinateFactory.createCoordinate(2, 2);
         Set<Coordinate> expectedCoordinates = new HashSet<>();
         expectedCoordinates.add(CoordinateFactory.createCoordinate(2, 2));
@@ -50,7 +80,6 @@ class CraftTest {
 
     @Test
     void testGetAnchorCoordinate() {
-        carrier = new Carrier(Orientation.NORTH);
         Coordinate anchorCoordinate = CoordinateFactory.createCoordinate(2, 2);
         carrier.setAnchorCoordinate(anchorCoordinate);
         assertEquals(anchorCoordinate, carrier.getAnchorCoordinate());
@@ -59,7 +88,6 @@ class CraftTest {
 
     @Test
     void testHitOk() {
-        carrier = new Carrier(Orientation.NORTH);
         Coordinate anchorCoordinate = CoordinateFactory.createCoordinate(2, 2);
         carrier.setAnchorCoordinate(anchorCoordinate);
         try {
@@ -81,7 +109,6 @@ class CraftTest {
 
     @Test
     void testHitOkMultipleShot() {
-        carrier = new Carrier(Orientation.NORTH);
         Coordinate anchorCoordinate = CoordinateFactory.createCoordinate(2, 2);
         carrier.setAnchorCoordinate(anchorCoordinate);
         try {
@@ -107,7 +134,6 @@ class CraftTest {
 
     @Test
     void testHitAlreadyHit() {
-        carrier = new Carrier(Orientation.NORTH);
         Coordinate anchorCoordinate = CoordinateFactory.createCoordinate(2, 2);
         carrier.setAnchorCoordinate(anchorCoordinate);
         try {
@@ -130,7 +156,6 @@ class CraftTest {
 
     @Test
     void testHitFail() {
-        carrier = new Carrier(Orientation.NORTH);
         Coordinate anchorCoordinate = CoordinateFactory.createCoordinate(2, 2);
         carrier.setAnchorCoordinate(anchorCoordinate);
         try {
@@ -152,7 +177,6 @@ class CraftTest {
 
     @Test
     void testIsHitYes() {
-        carrier = new Carrier(Orientation.NORTH);
         Coordinate anchorCoordinate = CoordinateFactory.createCoordinate(2, 2);
         carrier.setAnchorCoordinate(anchorCoordinate);
         try {
@@ -165,7 +189,6 @@ class CraftTest {
 
     @Test
     void testIsHitNo() {
-        carrier = new Carrier(Orientation.NORTH);
         Coordinate anchorCoordinate = CoordinateFactory.createCoordinate(2, 2);
         carrier.setAnchorCoordinate(anchorCoordinate);
         assertFalse(carrier.isHit(anchorCoordinate));
@@ -173,7 +196,6 @@ class CraftTest {
 
     @Test
     void testIsShotDownYes() {
-        carrier = new Carrier(Orientation.NORTH);
         Coordinate anchorCoordinate = CoordinateFactory.createCoordinate(2, 2);
         carrier.setAnchorCoordinate(anchorCoordinate);
         try {
@@ -190,7 +212,6 @@ class CraftTest {
 
     @Test
     void testIsShotDownNo() {
-        carrier = new Carrier(Orientation.NORTH);
         Coordinate anchorCoordinate = CoordinateFactory.createCoordinate(2, 2);
         carrier.setAnchorCoordinate(anchorCoordinate);
         try {

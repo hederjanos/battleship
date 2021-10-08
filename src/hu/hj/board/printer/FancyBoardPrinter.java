@@ -1,8 +1,9 @@
-package hu.hj.printer;
+package hu.hj.board.printer;
 
-import hu.hj.board.Board;
+import hu.hj.constants.Colour;
+import hu.hj.constants.Symbol;
 
-public class FancyBoardPrinter extends AbstractPrinter {
+public class FancyBoardPrinter implements SimpleBoardPrinter {
 
     private static final int TAB = 4;
     private static final String H_FRAME = "+-----";
@@ -10,8 +11,12 @@ public class FancyBoardPrinter extends AbstractPrinter {
     private static final String V_FRAME = "|  ";
     private static final String OR = "|";
 
-    public FancyBoardPrinter(Board board, boolean unveil) {
-        super(board, unveil);
+    private final String stringBoard;
+    private final int size;
+
+    public FancyBoardPrinter(String stringBoard, int size) {
+        this.stringBoard = stringBoard;
+        this.size = size;
     }
 
     @Override
@@ -43,29 +48,24 @@ public class FancyBoardPrinter extends AbstractPrinter {
     }
 
     private void printLine(int i) {
-        System.out.printf(Colour.ANSI_RESET + "%2d  ", i + 1);
+        System.out.printf(String.format("%s%%2d  ", Colour.ANSI_RESET.getColourCode()), i + 1);
         for (int j = 0; j < size; j++) {
-            System.out.print(Colour.ANSI_RESET + V_FRAME);
-            char currentCharacter = boardBuilder.charAt(i * size + j);
-            switch (currentCharacter) {
-                case WATER_SYMBOL:
-                    System.out.print(Colour.ANSI_BLUE + createSpaces(1));
-                    break;
-                case HIT_SYMBOL:
-                    System.out.print(Colour.ANSI_RED + HIT_SYMBOL);
-                    break;
-                case SEEN_SYMBOL:
-                    System.out.print(Colour.ANSI_PURPLE + SEEN_SYMBOL);
-                    break;
-                default:
-                    System.out.print(Colour.ANSI_GREEN + currentCharacter);
+            System.out.print(Colour.ANSI_RESET.getColourCode() + V_FRAME);
+            char currentCharacter = stringBoard.charAt(i * size + j);
+            if (currentCharacter == Symbol.WATER.getMark()) {
+                System.out.print(Colour.ANSI_BLUE.getColourCode() + currentCharacter);
+            } else if (currentCharacter == Symbol.HIT.getMark()) {
+                System.out.print(Colour.ANSI_RED.getColourCode() + currentCharacter);
+            } else if (currentCharacter == Symbol.SEEN.getMark()) {
+                System.out.print(Colour.ANSI_PURPLE.getColourCode() + currentCharacter);
+            } else {
+                System.out.print(Colour.ANSI_GREEN.getColourCode() + currentCharacter);
             }
             System.out.print(createSpaces(2));
         }
-        System.out.print(Colour.ANSI_RESET + OR);
+        System.out.print(Colour.ANSI_RESET.getColourCode() + OR);
         System.out.println();
     }
-
 
     private String createSpaces(int number) {
         return " " + " ".repeat(number - 1);

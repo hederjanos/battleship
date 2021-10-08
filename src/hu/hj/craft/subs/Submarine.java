@@ -1,11 +1,12 @@
 package hu.hj.craft.subs;
 
+import hu.hj.constants.Orientation;
+import hu.hj.constants.Symbol;
 import hu.hj.craft.CraftUtilities;
-import hu.hj.craft.Orientation;
 
 public class Submarine extends Sub {
 
-    public static final char SYMBOL = 'Q';
+    private static final Symbol SYMBOL = Symbol.SUBMARINE;
     private static final int[][] SHIP_SHAPE =
             {
                     {0, 0, 0, 0, 0},

@@ -1,4 +1,4 @@
-package hu.hj.board;
+package hu.hj.constants;
 
 public enum ShotStatus {
     WATER, HIT, DESTROYED
