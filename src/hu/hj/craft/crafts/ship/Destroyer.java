@@ -1,10 +1,9 @@
-package hu.hj.craft.ships;
+package hu.hj.craft.crafts.ship;
 
-import hu.hj.constants.Orientation;
 import hu.hj.constants.Symbol;
-import hu.hj.craft.CraftUtilities;
+import hu.hj.craft.crafts.Craft;
 
-public class Destroyer extends Ship {
+public class Destroyer extends Craft {
 
     private static final Symbol SYMBOL = Symbol.DESTROYER;
     private static final int[][] CLASS_SHAPE =
@@ -16,9 +15,9 @@ public class Destroyer extends Ship {
                     {0, 0, 0, 0, 0}
             };
 
-    public Destroyer(Orientation orientation) {
-        super(orientation, SYMBOL);
-        setShape(CraftUtilities.getOrientedShape(CLASS_SHAPE, orientation));
-        setInternalAnchorCoordinate();
+    public Destroyer() {
+        this.symbol = Symbol.DESTROYER;
+        this.shape = CLASS_SHAPE;
     }
+
 }

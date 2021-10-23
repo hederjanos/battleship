@@ -2,7 +2,7 @@ package hu.hj.board;
 
 import hu.hj.constants.ShotStatus;
 import hu.hj.coordinate.Coordinate;
-import hu.hj.craft.Craft;
+import hu.hj.craft.crafts.Craft;
 import hu.hj.exceptions.coordinate.CoordinateAlreadyHitException;
 import hu.hj.exceptions.coordinate.InvalidCoordinateException;
 import hu.hj.exceptions.coordinate.NextToAnotherException;

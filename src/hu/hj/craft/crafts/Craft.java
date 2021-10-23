@@ -1,4 +1,4 @@
-package hu.hj.craft;
+package hu.hj.craft.crafts;
 
 import hu.hj.constants.Orientation;
 import hu.hj.constants.Symbol;
@@ -15,16 +15,11 @@ public abstract class Craft {
     private static final int CRAFT_VALUE = 1;
     private static final int ANCHOR_VALUE = 2;
 
-    protected final Orientation orientation;
-    protected final Symbol symbol;
+    protected Orientation orientation;
+    protected Symbol symbol;
     protected int[][] shape;
     protected Coordinate internalAnchorCoordinate;
     protected Coordinate anchorCoordinate;
-
-    protected Craft(Orientation orientation, Symbol symbol) {
-        this.orientation = orientation;
-        this.symbol = symbol;
-    }
 
     public Set<Coordinate> getAbsoluteCoordinates() {
         return getAbsoluteCoordinates(anchorCoordinate);
@@ -66,7 +61,7 @@ public abstract class Craft {
         return false;
     }
 
-    protected boolean isHit(Coordinate coordinate) {
+    public boolean isHit(Coordinate coordinate) {
         boolean isHit = false;
         Set<Coordinate> absoluteCoordinates = getAbsoluteCoordinates();
         if (absoluteCoordinates.contains(coordinate)) {
@@ -95,7 +90,7 @@ public abstract class Craft {
         return isShotDown;
     }
 
-    protected Orientation getOrientation() {
+    public Orientation getOrientation() {
         return orientation;
     }
 
@@ -103,7 +98,7 @@ public abstract class Craft {
         return symbol;
     }
 
-    protected int[][] getShape() {
+    public int[][] getShape() {
         return shape;
     }
 
@@ -117,6 +112,12 @@ public abstract class Craft {
             coordinate = anchorCoordinate.copy();
         }
         return coordinate;
+    }
+
+    public void setOrientation(Orientation orientation) {
+        this.orientation = orientation;
+        setShape(CraftUtilities.getOrientedShape(shape, orientation));
+        setInternalAnchorCoordinate();
     }
 
     protected void setShape(int[][] shape) {

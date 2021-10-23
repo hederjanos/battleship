@@ -3,7 +3,8 @@ package hu.hj.craft;
 import hu.hj.constants.Orientation;
 import hu.hj.coordinate.Coordinate;
 import hu.hj.coordinate.CoordinateFactory;
-import hu.hj.craft.ships.Carrier;
+import hu.hj.craft.crafts.ship.Carrier;
+import hu.hj.craft.crafts.Craft;
 import hu.hj.exceptions.coordinate.CoordinateAlreadyHitException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,13 +20,15 @@ class CraftTest {
 
     @BeforeEach
     void setUp() {
-        carrier = new Carrier(Orientation.NORTH);
+        carrier = new Carrier();
+        carrier.setOrientation(Orientation.NORTH);
     }
 
     @Test
     void testConstruction() {
         for (Orientation orientation : Orientation.values()) {
-            carrier = new Carrier(orientation);
+            carrier = new Carrier();
+            carrier.setOrientation(orientation);
             switch (orientation) {
                 case SOUTH:
                     assertEquals(Orientation.SOUTH, carrier.getOrientation());
@@ -67,7 +70,8 @@ class CraftTest {
 
     @Test
     void testGetAbsolutPositionsOutOfBound() {
-        carrier = new Carrier(Orientation.EAST);
+        carrier = new Carrier();
+        carrier.setOrientation(Orientation.EAST);
         Coordinate anchorCoordinate = CoordinateFactory.createCoordinate(2, 2);
         Set<Coordinate> expectedCoordinates = new HashSet<>();
         expectedCoordinates.add(CoordinateFactory.createCoordinate(2, 2));

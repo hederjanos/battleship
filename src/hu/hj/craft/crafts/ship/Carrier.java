@@ -1,10 +1,9 @@
-package hu.hj.craft.ships;
+package hu.hj.craft.crafts.ship;
 
-import hu.hj.constants.Orientation;
 import hu.hj.constants.Symbol;
-import hu.hj.craft.CraftUtilities;
+import hu.hj.craft.crafts.Craft;
 
-public class Carrier extends Ship {
+public class Carrier extends Craft {
 
     private static final Symbol SYMBOL = Symbol.CARRIER;
     private static final int[][] CLASS_SHAPE =
@@ -16,9 +15,9 @@ public class Carrier extends Ship {
                     {0, 0, 1, 0, 0}
             };
 
-    public Carrier(Orientation orientation) {
-        super(orientation, SYMBOL);
-        setShape(CraftUtilities.getOrientedShape(CLASS_SHAPE, orientation));
-        setInternalAnchorCoordinate();
+    public Carrier() {
+        this.symbol = Symbol.CARRIER;
+        this.shape = CLASS_SHAPE;
     }
+
 }

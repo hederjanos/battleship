@@ -3,7 +3,7 @@ package hu.hj.board;
 import hu.hj.constants.Symbol;
 import hu.hj.coordinate.Coordinate;
 import hu.hj.coordinate.CoordinateFactory;
-import hu.hj.craft.Craft;
+import hu.hj.craft.crafts.Craft;
 
 public class SimpleBoardStringBuilder {
 

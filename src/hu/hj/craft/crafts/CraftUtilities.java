@@ -1,4 +1,4 @@
-package hu.hj.craft;
+package hu.hj.craft.crafts;
 
 import hu.hj.constants.Orientation;
 
@@ -36,7 +36,7 @@ public class CraftUtilities {
         return orientedShape;
     }
 
-    protected static int[] searchPositionInShape(int[][] shape, int value) {
+    public static int[] searchPositionInShape(int[][] shape, int value) {
         int[] searchedPosition = new int[2];
         for (int i = 0; i < shape.length; i++) {
             for (int j = 0; j < shape.length; j++) {

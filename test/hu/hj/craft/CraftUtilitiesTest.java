@@ -1,6 +1,7 @@
 package hu.hj.craft;
 
 import hu.hj.constants.Orientation;
+import hu.hj.craft.crafts.CraftUtilities;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

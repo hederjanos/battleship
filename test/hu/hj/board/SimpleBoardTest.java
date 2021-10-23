@@ -4,8 +4,12 @@ import hu.hj.constants.Orientation;
 import hu.hj.constants.ShotStatus;
 import hu.hj.coordinate.Coordinate;
 import hu.hj.coordinate.CoordinateFactory;
-import hu.hj.craft.Craft;
-import hu.hj.craft.CraftFactory;
+import hu.hj.craft.crafts.Craft;
+import hu.hj.craft.crafts.diveable.Submarine;
+import hu.hj.craft.crafts.ship.Battleship;
+import hu.hj.craft.crafts.ship.Carrier;
+import hu.hj.craft.crafts.ship.Cruiser;
+import hu.hj.craft.crafts.ship.Destroyer;
 import hu.hj.exceptions.coordinate.CoordinateAlreadyHitException;
 import hu.hj.exceptions.coordinate.InvalidCoordinateException;
 import hu.hj.exceptions.coordinate.NextToAnotherException;
@@ -27,11 +31,21 @@ class SimpleBoardTest {
     @BeforeEach
     void setUp() {
         board = new SimpleBoard();
-        carrier = CraftFactory.createCraft("ship", "Carrier", Orientation.NORTH);
-        cruiser = CraftFactory.createCraft("ship", "Cruiser", Orientation.SOUTH);
-        destroyer = CraftFactory.createCraft("ship", "Destroyer", Orientation.NORTH);
-        battleship = CraftFactory.createCraft("ship", "Battleship", Orientation.EAST);
-        submarine = CraftFactory.createCraft("sub", "Submarine", Orientation.WEST);
+
+        carrier = new Carrier();
+        carrier.setOrientation(Orientation.NORTH);
+
+        cruiser = new Cruiser();
+        cruiser.setOrientation(Orientation.SOUTH);
+
+        destroyer = new Destroyer();
+        destroyer.setOrientation(Orientation.NORTH);
+
+        battleship = new Battleship();
+        battleship.setOrientation(Orientation.EAST);
+
+        submarine = new Submarine();
+        submarine.setOrientation(Orientation.WEST);
     }
 
     @Test
