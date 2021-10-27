@@ -4,18 +4,16 @@ import hu.hj.board.Board;
 import hu.hj.controller.Controller;
 import hu.hj.craft.fleet.Fleet;
 import hu.hj.craft.fleetfactory.FleetFactory;
+import hu.hj.exceptions.BattleshipException;
+
+import java.io.IOException;
 
 public abstract class Player {
 
     protected Board board;
     protected Fleet fleet;
-    protected Controller controller;
 
     protected Player() {
-    }
-
-    public void setController(Controller controller) {
-        this.controller = controller;
     }
 
     public void setBoard(Board board) {
@@ -34,7 +32,7 @@ public abstract class Player {
         return fleet;
     }
 
-    public Controller getController() {
-        return controller;
-    }
+    public abstract void addCraft() throws BattleshipException, IOException;
+
+    public abstract Controller getController();
 }

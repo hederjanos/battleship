@@ -5,10 +5,10 @@ import hu.hj.board.Board;
 public class HuntAndTargetStrategy implements Strategy {
 
     @Override
-    public void putNextCraft(Board board) {
+    public void getNextCraft(Board board) {
     }
 
     @Override
-    public void nextHit(Board board) {
+    public void getNextHit(Board board) {
     }
 }

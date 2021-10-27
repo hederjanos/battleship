@@ -12,9 +12,9 @@ public class RobotPlayerBuilder extends PlayerBuilder {
 
     public void addController(String type) {
         if (type.equals("RANDOM")) {
-            player.setController(new RandomStrategy());
+            ((RobotPlayer) player).setStrategy(new RandomStrategy());
         } else if (type.equals("HUNTANDTARGET")) {
-            player.setController(new HuntAndTargetStrategy());
+            ((RobotPlayer) player).setStrategy(new HuntAndTargetStrategy());
         }
     }
 }

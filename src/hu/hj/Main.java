@@ -3,73 +3,52 @@ package hu.hj;
 import hu.hj.board.Board;
 import hu.hj.board.printer.FancyBoardPrinter;
 import hu.hj.board.printer.SimpleBoardPrinter;
-import hu.hj.constants.Orientation;
-import hu.hj.coordinate.Coordinate;
-import hu.hj.coordinate.CoordinateFactory;
-import hu.hj.craft.crafts.Craft;
-import hu.hj.exceptions.coordinate.CoordinateAlreadyHitException;
-import hu.hj.exceptions.coordinate.InvalidCoordinateException;
-import hu.hj.exceptions.coordinate.NextToAnotherException;
-import hu.hj.exceptions.coordinate.OccupiedCoordinateException;
+import hu.hj.exceptions.BattleshipException;
 import hu.hj.game.Game;
-import hu.hj.gamebuilder.GameBuilder;
 import hu.hj.gamebuilder.PVCGameBuilder;
 import hu.hj.player.Player;
+import hu.hj.ui.UserInterface;
+
+import java.io.IOException;
 
 public class Main {
 
     public static void main(String[] args) {
-        GameBuilder gameBuilder = new PVCGameBuilder();
+
+        UserInterface ui = new UserInterface();
+
+        PVCGameBuilder gameBuilder = new PVCGameBuilder();
 
         gameBuilder.setPlayerBuilders();
         gameBuilder.addBoard("SIMPLE");
         gameBuilder.addFleet("STANDARD");
-        gameBuilder.addController("RANDOM");
+        gameBuilder.addControllers("CONSOLE", "RANDOM");
+        gameBuilder.setHumanPlayerControllerReaders(ui.getReader());
 
         Game game = gameBuilder.getGame();
 
         Player player1 = game.getPlayerOne();
         Board board1 = player1.getBoard();
 
-        Player player2 = game.getPlayerTwo();
-        Board board2 = player2.getBoard();
 
-        try {
-
-            Craft craft = player1.getFleet().findCraft("Carrier");
-            craft.setOrientation(Orientation.NORTH);
-            Coordinate coordinate = CoordinateFactory.createCoordinate(1, 2);
-            board1.addCraft(craft, coordinate);
-
-
-            craft = player1.getFleet().findCraft("Cruiser");
-            craft.setOrientation(Orientation.SOUTH);
-            coordinate = CoordinateFactory.createCoordinate(4, 2);
-            board1.addCraft(craft, coordinate);
-
-
-            craft = player1.getFleet().findCraft("Destroyer");
-            craft.setOrientation(Orientation.NORTH);
-            coordinate = CoordinateFactory.createCoordinate(8, 1);
-            board1.addCraft(craft, coordinate);
-
-
-            craft = player1.getFleet().findCraft("Battleship");
-            craft.setOrientation(Orientation.EAST);
-            coordinate = CoordinateFactory.createCoordinate(8, 8);
-            board1.addCraft(craft, coordinate);
-
-
-            craft = player1.getFleet().findCraft("Submarine");
-            craft.setOrientation(Orientation.WEST);
-            coordinate = CoordinateFactory.createCoordinate(7, 5);
-            board1.addCraft(craft, coordinate);
-
-
-        } catch (InvalidCoordinateException | OccupiedCoordinateException | NextToAnotherException e) {
-            e.printStackTrace();
+        while (!player1.getFleet().areAllCraftsAddedToBattlefield()) {
+            try {
+                SimpleBoardPrinter printer = new FancyBoardPrinter(board1.toString(true), board1.getSize());
+                printer.print();
+                System.out.println("AVAILABLE: ");
+                player1.getFleet().printCrafts(player1.getFleet().getAllNotAddedCrafts());
+                player1.addCraft();
+            } catch (BattleshipException | IOException e) {
+                e.printStackTrace();
+            }
         }
-        try {
+        //Carrier NORTH 1 2;
+        //Cruiser SOUTH 4 2;
+        //Destroyer NORTH 8 1;
+        //Battleship EAST 8 8;
+        //Submarine WEST 7 5;
+
+        /*try {
             board1.hit(CoordinateFactory.createCoordinate(8, 1));
             board1.hit(CoordinateFactory.createCoordinate(8, 2));
             board1.hit(CoordinateFactory.createCoordinate(7, 5));
@@ -84,12 +63,6 @@ public class Main {
         printer.print();
 
         printer = new FancyBoardPrinter(board1.toString(false), board1.getSize());
-        printer.print();
-
-        printer = new FancyBoardPrinter(board2.toString(false), board2.getSize());
-        printer.print();
-
-        printer = new FancyBoardPrinter(board2.toString(true), board2.getSize());
-        printer.print();
+        printer.print();*/
     }
 }

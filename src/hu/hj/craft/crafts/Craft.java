@@ -1,5 +1,6 @@
 package hu.hj.craft.crafts;
 
+import hu.hj.constants.CraftStatus;
 import hu.hj.constants.Orientation;
 import hu.hj.constants.Symbol;
 import hu.hj.coordinate.Coordinate;
@@ -17,6 +18,7 @@ public abstract class Craft {
 
     protected Orientation orientation;
     protected Symbol symbol;
+    protected CraftStatus status;
     protected int[][] shape;
     protected Coordinate internalAnchorCoordinate;
     protected Coordinate anchorCoordinate;
@@ -98,6 +100,10 @@ public abstract class Craft {
         return symbol;
     }
 
+    public CraftStatus getStatus() {
+        return status;
+    }
+
     public int[][] getShape() {
         return shape;
     }
@@ -120,6 +126,10 @@ public abstract class Craft {
         setInternalAnchorCoordinate();
     }
 
+    public void setStatus(CraftStatus status) {
+        this.status = status;
+    }
+
     protected void setShape(int[][] shape) {
         this.shape = shape;
     }
@@ -131,5 +141,19 @@ public abstract class Craft {
 
     public void setAnchorCoordinate(Coordinate coordinate) {
         this.anchorCoordinate = coordinate.copy();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName()).append(": ");
+        for (int[] ints : shape) {
+            for (int anInt : ints) {
+                if (anInt != 0) {
+                    sb.append(symbol.getMark());
+                }
+            }
+        }
+        return sb.toString();
     }
 }

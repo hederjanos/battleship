@@ -20,9 +20,9 @@ public abstract class PlayerBuilder {
         }
     }
 
-    public abstract void addController(String type);
-
-    public Player getPlayer() {
+    public  Player getPlayer() {
         return player;
     }
+
+    public abstract void addController(String type);
 }

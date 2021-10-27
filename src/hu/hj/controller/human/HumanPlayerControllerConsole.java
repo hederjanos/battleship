@@ -1,15 +1,24 @@
 package hu.hj.controller.human;
 
-import hu.hj.board.Board;
+import java.io.BufferedReader;
+import java.io.IOException;
 
 public class HumanPlayerControllerConsole implements HumanPlayerController {
 
-    @Override
-    public void putNextCraft(Board board) {
+    private BufferedReader bufferedReader;
+
+    public void setReader(BufferedReader bufferedReader) {
+        this.bufferedReader = bufferedReader;
     }
 
     @Override
-    public void nextHit(Board board) {
+    public String getNextCraft() throws IOException {
+        System.out.println("\nAdd:");
+        return bufferedReader.readLine();
+    }
+
+    @Override
+    public void getNextHit() {
     }
 
 }

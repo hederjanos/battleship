@@ -5,7 +5,6 @@ import hu.hj.craft.crafts.Craft;
 
 public class Carrier extends Craft {
 
-    private static final Symbol SYMBOL = Symbol.CARRIER;
     private static final int[][] CLASS_SHAPE =
             {
                     {0, 0, 2, 0, 0},

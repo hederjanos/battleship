@@ -5,13 +5,13 @@ import hu.hj.coordinate.Coordinate;
 import hu.hj.craft.crafts.Craft;
 import hu.hj.exceptions.coordinate.CoordinateAlreadyHitException;
 import hu.hj.exceptions.coordinate.InvalidCoordinateException;
-import hu.hj.exceptions.coordinate.NextToAnotherException;
+import hu.hj.exceptions.coordinate.CoordinateNextToAnotherException;
 import hu.hj.exceptions.coordinate.OccupiedCoordinateException;
 
 public interface Board {
 
     boolean addCraft(Craft craft, Coordinate possibleAnchorCoordinate)
-            throws InvalidCoordinateException, OccupiedCoordinateException, NextToAnotherException;
+            throws InvalidCoordinateException, OccupiedCoordinateException, CoordinateNextToAnotherException;
 
     Craft getCraft(Coordinate coordinate);
 

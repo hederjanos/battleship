@@ -41,19 +41,19 @@ public class FancyBoardPrinter implements SimpleBoardPrinter {
     private void printHorizontalFrame() {
         System.out.print(createSpaces(TAB));
         for (int j = 0; j < size; j++) {
-            System.out.print(H_FRAME);
+            System.out.print(Colour.ANSI_BLUE.getColourCode() + H_FRAME);
         }
         System.out.print(PLUS);
-        System.out.println();
+        System.out.println(Colour.ANSI_RESET.getColourCode());
     }
 
     private void printLine(int i) {
         System.out.printf(String.format("%s%%2d  ", Colour.ANSI_RESET.getColourCode()), i + 1);
         for (int j = 0; j < size; j++) {
-            System.out.print(Colour.ANSI_RESET.getColourCode() + V_FRAME);
+            System.out.print(Colour.ANSI_BLUE.getColourCode() + V_FRAME);
             char currentCharacter = stringBoard.charAt(i * size + j);
             if (currentCharacter == Symbol.WATER.getMark()) {
-                System.out.print(Colour.ANSI_BLUE.getColourCode() + currentCharacter);
+                System.out.print(createSpaces(1));
             } else if (currentCharacter == Symbol.HIT.getMark()) {
                 System.out.print(Colour.ANSI_RED.getColourCode() + currentCharacter);
             } else if (currentCharacter == Symbol.SEEN.getMark()) {
@@ -63,7 +63,7 @@ public class FancyBoardPrinter implements SimpleBoardPrinter {
             }
             System.out.print(createSpaces(2));
         }
-        System.out.print(Colour.ANSI_RESET.getColourCode() + OR);
+        System.out.print(Colour.ANSI_BLUE.getColourCode() + OR);
         System.out.println();
     }
 

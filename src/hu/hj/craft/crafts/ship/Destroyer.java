@@ -5,7 +5,6 @@ import hu.hj.craft.crafts.Craft;
 
 public class Destroyer extends Craft {
 
-    private static final Symbol SYMBOL = Symbol.DESTROYER;
     private static final int[][] CLASS_SHAPE =
             {
                     {0, 0, 0, 0, 0},

@@ -2,12 +2,12 @@ package hu.hj.game;
 
 import hu.hj.player.Player;
 
-public abstract class Game {
+public class Game {
 
     protected Player playerOne;
     protected Player playerTwo;
 
-    protected Game(Player playerOne, Player playerTwo) {
+    public Game(Player playerOne, Player playerTwo) {
         this.playerOne = playerOne;
         this.playerTwo = playerTwo;
     }

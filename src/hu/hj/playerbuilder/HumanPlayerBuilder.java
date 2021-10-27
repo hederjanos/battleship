@@ -6,12 +6,12 @@ import hu.hj.player.HumanPlayer;
 public class HumanPlayerBuilder extends PlayerBuilder {
 
     public HumanPlayerBuilder() {
-       player = new HumanPlayer();
+        player = new HumanPlayer();
     }
 
     public void addController(String type) {
         if (type.equals("CONSOLE")) {
-            player.setController(new HumanPlayerControllerConsole());
+            ((HumanPlayer) player).setHumanPlayerController(new HumanPlayerControllerConsole());
         }
     }
 }

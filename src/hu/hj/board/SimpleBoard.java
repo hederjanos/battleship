@@ -1,11 +1,12 @@
 package hu.hj.board;
 
+import hu.hj.constants.CraftStatus;
 import hu.hj.constants.ShotStatus;
 import hu.hj.coordinate.Coordinate;
 import hu.hj.craft.crafts.Craft;
 import hu.hj.exceptions.coordinate.CoordinateAlreadyHitException;
 import hu.hj.exceptions.coordinate.InvalidCoordinateException;
-import hu.hj.exceptions.coordinate.NextToAnotherException;
+import hu.hj.exceptions.coordinate.CoordinateNextToAnotherException;
 import hu.hj.exceptions.coordinate.OccupiedCoordinateException;
 
 import java.util.HashMap;
@@ -39,7 +40,7 @@ public class SimpleBoard implements Board {
     }
 
     public boolean addCraft(Craft craft, Coordinate possibleAnchorCoordinate)
-            throws InvalidCoordinateException, OccupiedCoordinateException, NextToAnotherException {
+            throws InvalidCoordinateException, OccupiedCoordinateException, CoordinateNextToAnotherException {
         Set<Coordinate> craftPossibleCoordinates = craft.getAbsoluteCoordinates(possibleAnchorCoordinate);
 
         checkIfCraftFitInBattlefield(possibleAnchorCoordinate, craftPossibleCoordinates);
@@ -47,6 +48,7 @@ public class SimpleBoard implements Board {
         checkCraftNeighbourhood(craft, possibleAnchorCoordinate);
 
         craft.setAnchorCoordinate(possibleAnchorCoordinate);
+        craft.setStatus(CraftStatus.INTACT);
 
         addCraftToBattlefield(craft, craftPossibleCoordinates);
 
@@ -70,11 +72,11 @@ public class SimpleBoard implements Board {
         return (x >= 0 && x < size && y >= 0 && y < size);
     }
 
-    private void checkCraftNeighbourhood(Craft craft, Coordinate possibleAnchorCoordinate) throws NextToAnotherException {
+    private void checkCraftNeighbourhood(Craft craft, Coordinate possibleAnchorCoordinate) throws CoordinateNextToAnotherException {
         Set<Coordinate> craftNeighbourCoordinates = getNeighbourhood(craft, possibleAnchorCoordinate);
         for (Coordinate neighbourCoordinate : craftNeighbourCoordinates) {
             if (getCraft(neighbourCoordinate) != null) {
-                throw new NextToAnotherException(neighbourCoordinate);
+                throw new CoordinateNextToAnotherException(neighbourCoordinate);
             }
         }
     }
@@ -126,9 +128,11 @@ public class SimpleBoard implements Board {
             shotStatus = ShotStatus.WATER;
         } else {
             if (craft.hit(coordinate)) {
+                craft.setStatus(CraftStatus.HIT);
                 seenCoordinates.add(coordinate.copy());
                 if (craft.isShotDown()) {
                     revealCraftNeighbourhood(craft);
+                    craft.setStatus(CraftStatus.DESTROYED);
                     shotStatus = ShotStatus.DESTROYED;
                 }
             }
