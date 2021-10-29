@@ -4,7 +4,14 @@ import hu.hj.exceptions.BattleshipException;
 
 public class BattleshipIOException extends BattleshipException {
 
-    protected BattleshipIOException(String message) {
-        super(message);
+    protected final String input;
+
+    public BattleshipIOException(String input) {
+        this.input = input;
+    }
+
+    @Override
+    public String getMessage() {
+        return this.getClass().getSimpleName() + ": " + input;
     }
 }

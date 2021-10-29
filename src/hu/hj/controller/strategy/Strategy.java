@@ -8,5 +8,5 @@ public interface Strategy extends Controller {
 
     void getNextCraft(Board board);
 
-    void getNextHit(Board board);
+    void getNextShot(Board board);
 }

@@ -6,8 +6,6 @@ import hu.hj.craft.fleet.Fleet;
 import hu.hj.craft.fleetfactory.FleetFactory;
 import hu.hj.exceptions.BattleshipException;
 
-import java.io.IOException;
-
 public abstract class Player {
 
     protected Board board;
@@ -32,7 +30,7 @@ public abstract class Player {
         return fleet;
     }
 
-    public abstract void addCraft() throws BattleshipException, IOException;
+    public abstract void addCraft() throws BattleshipException;
 
     public abstract Controller getController();
 }

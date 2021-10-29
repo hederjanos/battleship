@@ -3,13 +3,12 @@ package hu.hj;
 import hu.hj.board.Board;
 import hu.hj.board.printer.FancyBoardPrinter;
 import hu.hj.board.printer.SimpleBoardPrinter;
+import hu.hj.constants.Colour;
 import hu.hj.exceptions.BattleshipException;
 import hu.hj.game.Game;
 import hu.hj.gamebuilder.PVCGameBuilder;
 import hu.hj.player.Player;
 import hu.hj.ui.UserInterface;
-
-import java.io.IOException;
 
 public class Main {
 
@@ -23,23 +22,28 @@ public class Main {
         gameBuilder.addBoard("SIMPLE");
         gameBuilder.addFleet("STANDARD");
         gameBuilder.addControllers("CONSOLE", "RANDOM");
-        gameBuilder.setHumanPlayerControllerReaders(ui.getReader());
-
+        if (gameBuilder instanceof PVCGameBuilder) {
+            gameBuilder.setHumanPlayerControllerReaders(ui.getReader());
+        }
         Game game = gameBuilder.getGame();
 
         Player player1 = game.getPlayerOne();
         Board board1 = player1.getBoard();
 
 
+        SimpleBoardPrinter printer = new FancyBoardPrinter(board1.toString(true), board1.getSize());
+        printer.print();
+
         while (!player1.getFleet().areAllCraftsAddedToBattlefield()) {
             try {
-                SimpleBoardPrinter printer = new FancyBoardPrinter(board1.toString(true), board1.getSize());
-                printer.print();
-                System.out.println("AVAILABLE: ");
+                System.out.print("AVAILABLE CRAFTS: ");
                 player1.getFleet().printCrafts(player1.getFleet().getAllNotAddedCrafts());
                 player1.addCraft();
-            } catch (BattleshipException | IOException e) {
-                e.printStackTrace();
+                printer = new FancyBoardPrinter(board1.toString(true), board1.getSize());
+                printer.print();
+            } catch (BattleshipException e) {
+                System.out.println(Colour.ANSI_RED.getColourCode() + e.getMessage());
+                System.out.println(Colour.ANSI_RESET.getColourCode());
             }
         }
         //Carrier NORTH 1 2;

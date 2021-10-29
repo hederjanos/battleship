@@ -23,6 +23,7 @@ public abstract class Fleet {
         for (Craft craft : crafts) {
             if (craft.getClass().getSimpleName().equals(craftType)) {
                 craftToReturn = craft;
+                break;
             }
         }
         return craftToReturn;
@@ -64,5 +65,6 @@ public abstract class Fleet {
             System.out.print(craft);
             System.out.print(" ");
         }
+        System.out.println();
     }
 }

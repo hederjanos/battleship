@@ -11,7 +11,7 @@ public class HumanPlayerBuilder extends PlayerBuilder {
 
     public void addController(String type) {
         if (type.equals("CONSOLE")) {
-            ((HumanPlayer) player).setHumanPlayerController(new HumanPlayerControllerConsole());
+            ((HumanPlayer) player).setHumanPlayerController(new HumanPlayerControllerConsole(player.getFleet()));
         }
     }
 }

@@ -7,10 +7,13 @@ import hu.hj.coordinate.Coordinate;
 import hu.hj.coordinate.CoordinateFactory;
 import hu.hj.exceptions.coordinate.CoordinateAlreadyHitException;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class Craft {
+public abstract class Craft implements Serializable {
+
+    protected static final long serialVersionUID = 1L;
 
     private static final int HIT_VALUE = -1;
     private static final int CRAFT_VALUE = 1;

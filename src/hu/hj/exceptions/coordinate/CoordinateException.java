@@ -11,12 +11,8 @@ public abstract class CoordinateException extends BattleshipException {
         this.coordinate = coordinate;
     }
 
-    public Coordinate getCoordinate() {
-        return coordinate;
-    }
-
     @Override
     public String getMessage() {
-        return coordinate.toString();
+        return this.getClass().getSimpleName() + ": " + coordinate.toString();
     }
 }

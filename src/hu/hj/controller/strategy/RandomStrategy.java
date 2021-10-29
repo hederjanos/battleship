@@ -9,6 +9,6 @@ public class RandomStrategy implements Strategy {
     }
 
     @Override
-    public void getNextHit(Board board) {
+    public void getNextShot(Board board) {
     }
 }
