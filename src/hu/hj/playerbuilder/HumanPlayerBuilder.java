@@ -1,7 +1,9 @@
 package hu.hj.playerbuilder;
 
-import hu.hj.controller.human.HumanPlayerControllerConsole;
+import hu.hj.director.human.HumanPlayerControllerConsole;
 import hu.hj.player.HumanPlayer;
+
+import java.util.Scanner;
 
 public class HumanPlayerBuilder extends PlayerBuilder {
 
@@ -9,9 +11,7 @@ public class HumanPlayerBuilder extends PlayerBuilder {
         player = new HumanPlayer();
     }
 
-    public void addController(String type) {
-        if (type.equals("CONSOLE")) {
-            ((HumanPlayer) player).setHumanPlayerController(new HumanPlayerControllerConsole(player.getFleet()));
-        }
+    public void addController(Scanner scanner) {
+        ((HumanPlayer) player).setController(new HumanPlayerControllerConsole(scanner));
     }
 }

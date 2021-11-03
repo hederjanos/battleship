@@ -1,39 +1,38 @@
-package hu.hj.controller.human;
+package hu.hj.director.human;
 
-import hu.hj.constants.Colour;
 import hu.hj.constants.Orientation;
-import hu.hj.controller.command.AddCommand;
-import hu.hj.controller.command.ShotCommand;
 import hu.hj.craft.crafts.Craft;
 import hu.hj.craft.fleet.Fleet;
-import hu.hj.exceptions.io.BattleshipIOException;
+import hu.hj.director.command.AddCommand;
+import hu.hj.director.command.ShotCommand;
 import hu.hj.exceptions.io.InvalidAddCommandFormatException;
 import hu.hj.exceptions.io.InvalidCraftNameException;
 import hu.hj.exceptions.io.InvalidOrientationException;
+import hu.hj.exceptions.io.InvalidShotCommandFormatException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class HumanPlayerControllerConsole implements HumanPlayerController {
 
     private static final String ADD_CRAFT_REGEXP = "^[a-z]*[\\s][[a-z]]*[\\s][a-z][\\s][\\d]*$";
+    private static final String SHOT_REGEXP = "^[a-z]*[\\s][[\\d]]*$";
     private static final char A = 'a';
-    private BufferedReader bufferedReader;
-    private final Map<String, List<String>> craftDictionary;
-    private final Map<String, List<String>> orientationDictionary;
+    private static final String Q = "q";
+    private final Scanner scanner;
+    private Map<String, List<String>> orientationDictionary;
+    private Map<String, List<String>> craftDictionary;
 
-    public HumanPlayerControllerConsole(Fleet fleet) {
-        this.craftDictionary = new HashMap<>();
-        for (Craft craft : fleet.getAllNotAddedCrafts()) {
-            String craftName = craft.getClass().getSimpleName();
-            craftDictionary.putIfAbsent(craftName, List.of(craftName.toLowerCase(), craftName.substring(0, 3).toLowerCase()));
-        }
+    public HumanPlayerControllerConsole(Scanner scanner) {
+        this.scanner = scanner;
+        initializeOrientationDictionary();
+    }
 
+    private void initializeOrientationDictionary() {
         this.orientationDictionary = new HashMap<>();
         for (Orientation orientation : Orientation.values()) {
             String orientationName = orientation.toString();
@@ -41,30 +40,37 @@ public class HumanPlayerControllerConsole implements HumanPlayerController {
         }
     }
 
-    public void setReader(BufferedReader bufferedReader) {
-        this.bufferedReader = bufferedReader;
-    }
-
-    @Override
-    public AddCommand getNextCraft() throws BattleshipIOException {
-        while (true) {
-            try {
-                System.out.println("Add a craft to the board.");
-                System.out.println("Examples for valid formats: carrier\\car north\\n b 3. Case insensitive.");
-                System.out.print("Type your command: ");
-                String input = bufferedReader.readLine().toLowerCase();
-                patternMatches(input);
-                return parseAddCommand(input);
-            } catch (IOException e) {
-                throw new BattleshipIOException(e.getMessage());
-            } catch (InvalidAddCommandFormatException | InvalidCraftNameException | InvalidOrientationException e) {
-                System.out.println(Colour.ANSI_RED.getColourCode() + e.getMessage());
-                System.out.println(Colour.ANSI_RESET.getColourCode());
+    private void initializeCraftDictionary(Fleet fleet) {
+        if (this.craftDictionary == null) {
+            this.craftDictionary = new HashMap<>();
+            for (Craft craft : fleet.getAllNotAddedCrafts()) {
+                String craftName = craft.getClass().getSimpleName();
+                craftDictionary.putIfAbsent(craftName, List.of(craftName.toLowerCase(), craftName.substring(0, 3).toLowerCase()));
             }
         }
     }
 
-    private void patternMatches(String input) throws InvalidAddCommandFormatException {
+    @Override
+    public AddCommand getNextCraftFromFleet(Fleet fleet) throws InvalidAddCommandFormatException, InvalidCraftNameException, InvalidOrientationException {
+        AddCommand addCommand = null;
+        initializeCraftDictionary(fleet);
+        String input = getCommand();
+        if (!isQuit(input)) {
+            patternMatchesWithAddRule(input);
+            addCommand = parseAddCommand(input);
+        }
+        return addCommand;
+    }
+
+    private boolean isQuit(String input) {
+        return input.equals(Q);
+    }
+
+    private String getCommand() {
+        return scanner.nextLine().toLowerCase();
+    }
+
+    private void patternMatchesWithAddRule(String input) throws InvalidAddCommandFormatException {
         Pattern pattern = Pattern.compile(ADD_CRAFT_REGEXP);
         Matcher matcher = pattern.matcher(input);
         if (!matcher.matches()) {
@@ -116,7 +122,29 @@ public class HumanPlayerControllerConsole implements HumanPlayerController {
     }
 
     @Override
-    public ShotCommand getNextShot() {
-        return null;
+    public ShotCommand addNextShot() throws InvalidShotCommandFormatException {
+        ShotCommand shotCommand = null;
+        String input = getCommand();
+        if (!isQuit(input)) {
+            patternMatchesWithShotRule(input);
+            shotCommand = parseShotCommand(input);
+        }
+        return shotCommand;
+    }
+
+    private ShotCommand parseShotCommand(String input) {
+        String[] commandParts = input.split(" ");
+        int xCoordinate = Character.codePointAt(commandParts[0].toCharArray(), 0) - A;
+        int yCoordinate = Integer.parseInt(commandParts[1]) - 1;
+        int[] coordinates = new int[]{xCoordinate, yCoordinate};
+        return new ShotCommand(coordinates);
+    }
+
+    private void patternMatchesWithShotRule(String input) throws InvalidShotCommandFormatException {
+        Pattern pattern = Pattern.compile(SHOT_REGEXP);
+        Matcher matcher = pattern.matcher(input);
+        if (!matcher.matches()) {
+            throw new InvalidShotCommandFormatException(input);
+        }
     }
 }

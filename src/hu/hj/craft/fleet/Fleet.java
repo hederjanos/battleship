@@ -60,11 +60,12 @@ public abstract class Fleet {
         return existingCrafts;
     }
 
-    public void printCrafts(List<Craft> crafts) {
+    public String toString(List<Craft> crafts) {
+        StringBuilder stringBuilder = new StringBuilder();
         for (Craft craft : crafts) {
-            System.out.print(craft);
-            System.out.print(" ");
+            stringBuilder.append(craft).append(" ");
         }
-        System.out.println();
+        stringBuilder.append("\n");
+        return stringBuilder.toString();
     }
 }

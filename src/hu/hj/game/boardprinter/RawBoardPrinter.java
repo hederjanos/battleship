@@ -1,4 +1,4 @@
-package hu.hj.board.printer;
+package hu.hj.game.boardprinter;
 
 public class RawBoardPrinter implements SimpleBoardPrinter {
 
@@ -10,7 +10,7 @@ public class RawBoardPrinter implements SimpleBoardPrinter {
         this.size = size;
     }
 
-    public void print() {
+    public void print(String stringBoard, int size) {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 System.out.print(stringBoard.charAt(i * size + j));

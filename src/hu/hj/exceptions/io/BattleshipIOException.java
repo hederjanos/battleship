@@ -2,11 +2,14 @@ package hu.hj.exceptions.io;
 
 import hu.hj.exceptions.BattleshipException;
 
-public class BattleshipIOException extends BattleshipException {
+public abstract class BattleshipIOException extends BattleshipException {
 
-    protected final String input;
+    protected String input;
 
-    public BattleshipIOException(String input) {
+    protected BattleshipIOException() {
+    }
+
+    protected BattleshipIOException(String input) {
         this.input = input;
     }
 

@@ -162,6 +162,7 @@ public class SimpleBoard implements Board {
         return numberOfCrafts == destroyedCrafts;
     }
 
+    @Override
     public String toString(boolean unveil) {
         return new SimpleBoardStringBuilder(this, unveil).getStringBoard();
     }

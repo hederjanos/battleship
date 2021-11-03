@@ -1,4 +1,4 @@
-package hu.hj.controller.command;
+package hu.hj.director.command;
 
 public class AddCommand extends PlayControlCommand {
 

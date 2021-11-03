@@ -1,7 +1,7 @@
 package hu.hj.player;
 
 import hu.hj.board.Board;
-import hu.hj.controller.Controller;
+import hu.hj.director.Director;
 import hu.hj.craft.fleet.Fleet;
 import hu.hj.craft.fleetfactory.FleetFactory;
 import hu.hj.exceptions.BattleshipException;
@@ -10,6 +10,7 @@ public abstract class Player {
 
     protected Board board;
     protected Fleet fleet;
+    protected Director director;
 
     protected Player() {
     }
@@ -30,7 +31,16 @@ public abstract class Player {
         return fleet;
     }
 
-    public abstract void addCraft() throws BattleshipException;
+    public Director getDirector() {
+        return director;
+    }
 
-    public abstract Controller getController();
+    public String getName() {
+        return this.getClass().getSimpleName();
+    }
+
+    public abstract boolean addCraft() throws BattleshipException;
+
+    public abstract boolean shoot(Board board) throws BattleshipException;
+
 }
