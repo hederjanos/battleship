@@ -10,10 +10,7 @@ import hu.hj.craft.crafts.ship.Battleship;
 import hu.hj.craft.crafts.ship.Carrier;
 import hu.hj.craft.crafts.ship.Cruiser;
 import hu.hj.craft.crafts.ship.Destroyer;
-import hu.hj.exceptions.coordinate.CoordinateAlreadyHitException;
-import hu.hj.exceptions.coordinate.InvalidCoordinateException;
-import hu.hj.exceptions.coordinate.CoordinateNextToAnotherException;
-import hu.hj.exceptions.coordinate.OccupiedCoordinateException;
+import hu.hj.exceptions.coordinate.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -81,7 +78,7 @@ class SimpleBoardTest {
         Coordinate coordinate = CoordinateFactory.createCoordinate(1, 2);
         try {
             board.addCraft(carrier, coordinate);
-        } catch (InvalidCoordinateException | OccupiedCoordinateException | CoordinateNextToAnotherException e) {
+        } catch (CoordinateException e) {
             e.printStackTrace();
         }
         assertNotEquals(carrier, board.getCraft(CoordinateFactory.createCoordinate(1, 1)));
@@ -113,7 +110,7 @@ class SimpleBoardTest {
         Coordinate carrierCoordinate = CoordinateFactory.createCoordinate(1, 2);
         try {
             board.addCraft(carrier, carrierCoordinate);
-        } catch (InvalidCoordinateException | OccupiedCoordinateException | CoordinateNextToAnotherException e) {
+        } catch (CoordinateException e) {
             e.printStackTrace();
         }
         Coordinate battleshipCoordinate = CoordinateFactory.createCoordinate(2, 4);
@@ -125,7 +122,7 @@ class SimpleBoardTest {
         Coordinate carrierCoordinate = CoordinateFactory.createCoordinate(1, 2);
         try {
             board.addCraft(carrier, carrierCoordinate);
-        } catch (InvalidCoordinateException | OccupiedCoordinateException | CoordinateNextToAnotherException e) {
+        } catch (CoordinateException e) {
             e.printStackTrace();
         }
         Coordinate battleshipCoordinate = CoordinateFactory.createCoordinate(3, 7);
@@ -137,7 +134,7 @@ class SimpleBoardTest {
         Coordinate carrierCoordinate = CoordinateFactory.createCoordinate(1, 2);
         try {
             board.addCraft(carrier, carrierCoordinate);
-        } catch (InvalidCoordinateException | OccupiedCoordinateException | CoordinateNextToAnotherException e) {
+        } catch (CoordinateException e) {
             e.printStackTrace();
         }
         Coordinate destroyerCoordinate = CoordinateFactory.createCoordinate(2, 2);
@@ -162,7 +159,7 @@ class SimpleBoardTest {
         try {
             board.addCraft(carrier, carrierCoordinate);
             board.addCraft(battleship, battleshipCoordinate);
-        } catch (InvalidCoordinateException | OccupiedCoordinateException | CoordinateNextToAnotherException e) {
+        } catch (CoordinateException e) {
             e.printStackTrace();
         }
         assertEquals(expectedBoard, board.toString(true));
@@ -186,7 +183,7 @@ class SimpleBoardTest {
         try {
             board.addCraft(carrier, carrierCoordinate);
             board.addCraft(destroyer, destroyerCoordinate);
-        } catch (InvalidCoordinateException | OccupiedCoordinateException | CoordinateNextToAnotherException e) {
+        } catch (CoordinateException e) {
             e.printStackTrace();
         }
         assertEquals(expectedBoard, board.toString(true));
@@ -216,7 +213,7 @@ class SimpleBoardTest {
             board.addCraft(cruiser, cruiserCoordinate);
             board.addCraft(submarine, submarineCoordinate);
             board.addCraft(battleship, battleshipCoordinate);
-        } catch (InvalidCoordinateException | OccupiedCoordinateException | CoordinateNextToAnotherException e) {
+        } catch (CoordinateException e) {
             e.printStackTrace();
         }
         assertEquals(expectedBoard, board.toString(true));
@@ -227,7 +224,7 @@ class SimpleBoardTest {
         Coordinate battleshipCoordinate = CoordinateFactory.createCoordinate(8, 8);
         try {
             board.addCraft(battleship, battleshipCoordinate);
-        } catch (InvalidCoordinateException | OccupiedCoordinateException | CoordinateNextToAnotherException e) {
+        } catch (CoordinateException e) {
             e.printStackTrace();
         }
         assertThrows(InvalidCoordinateException.class, () -> board.hit(CoordinateFactory.createCoordinate(8, 10)));
@@ -238,12 +235,12 @@ class SimpleBoardTest {
         Coordinate battleshipCoordinate = CoordinateFactory.createCoordinate(8, 8);
         try {
             board.addCraft(battleship, battleshipCoordinate);
-        } catch (InvalidCoordinateException | OccupiedCoordinateException | CoordinateNextToAnotherException e) {
+        } catch (CoordinateException e) {
             e.printStackTrace();
         }
         try {
             assertEquals(ShotStatus.WATER, board.hit(CoordinateFactory.createCoordinate(4, 8)));
-        } catch (InvalidCoordinateException | CoordinateAlreadyHitException e) {
+        } catch (CoordinateException e) {
             e.printStackTrace();
         }
     }
@@ -253,12 +250,12 @@ class SimpleBoardTest {
         Coordinate battleshipCoordinate = CoordinateFactory.createCoordinate(8, 8);
         try {
             board.addCraft(battleship, battleshipCoordinate);
-        } catch (InvalidCoordinateException | OccupiedCoordinateException | CoordinateNextToAnotherException e) {
+        } catch (CoordinateException e) {
             e.printStackTrace();
         }
         try {
             assertEquals(ShotStatus.HIT, board.hit(CoordinateFactory.createCoordinate(5, 8)));
-        } catch (InvalidCoordinateException | CoordinateAlreadyHitException e) {
+        } catch (CoordinateException e) {
             e.printStackTrace();
         }
     }
@@ -268,7 +265,7 @@ class SimpleBoardTest {
         Coordinate battleshipCoordinate = CoordinateFactory.createCoordinate(8, 8);
         try {
             board.addCraft(battleship, battleshipCoordinate);
-        } catch (InvalidCoordinateException | OccupiedCoordinateException | CoordinateNextToAnotherException e) {
+        } catch (CoordinateException e) {
             e.printStackTrace();
         }
         try {
@@ -276,7 +273,7 @@ class SimpleBoardTest {
             board.hit(CoordinateFactory.createCoordinate(6, 8));
             board.hit(CoordinateFactory.createCoordinate(7, 8));
             assertEquals(ShotStatus.DESTROYED, board.hit(CoordinateFactory.createCoordinate(8, 8)));
-        } catch (InvalidCoordinateException | CoordinateAlreadyHitException e) {
+        } catch (CoordinateException e) {
             e.printStackTrace();
         }
     }
@@ -305,7 +302,7 @@ class SimpleBoardTest {
             board.addCraft(cruiser, cruiserCoordinate);
             board.addCraft(submarine, submarineCoordinate);
             board.addCraft(battleship, battleshipCoordinate);
-        } catch (InvalidCoordinateException | OccupiedCoordinateException | CoordinateNextToAnotherException e) {
+        } catch (CoordinateException e) {
             e.printStackTrace();
         }
 
@@ -315,7 +312,7 @@ class SimpleBoardTest {
             board.hit(CoordinateFactory.createCoordinate(7, 5));
             board.hit(CoordinateFactory.createCoordinate(8, 5));
             board.hit(CoordinateFactory.createCoordinate(9, 5));
-        } catch (InvalidCoordinateException | CoordinateAlreadyHitException e) {
+        } catch (CoordinateException e) {
             e.printStackTrace();
         }
         assertEquals(expectedBoard, board.toString(true));
@@ -345,7 +342,7 @@ class SimpleBoardTest {
             board.addCraft(cruiser, cruiserCoordinate);
             board.addCraft(submarine, submarineCoordinate);
             board.addCraft(battleship, battleshipCoordinate);
-        } catch (InvalidCoordinateException | OccupiedCoordinateException | CoordinateNextToAnotherException e) {
+        } catch (CoordinateException e) {
             e.printStackTrace();
         }
 
@@ -355,7 +352,7 @@ class SimpleBoardTest {
             board.hit(CoordinateFactory.createCoordinate(7, 5));
             board.hit(CoordinateFactory.createCoordinate(8, 5));
             board.hit(CoordinateFactory.createCoordinate(9, 5));
-        } catch (InvalidCoordinateException | CoordinateAlreadyHitException e) {
+        } catch (CoordinateException e) {
             e.printStackTrace();
         }
         assertEquals(expectedBoard, board.toString(false));

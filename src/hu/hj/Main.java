@@ -1,11 +1,11 @@
 package hu.hj;
 
-import hu.hj.game.Menu;
+import hu.hj.game.Application;
 
 public class Main {
 
     public static void main(String[] args) {
-        new Menu().run();
+        new Application().run();
     }
 
     //Carrier NORTH b 3;

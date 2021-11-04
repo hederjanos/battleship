@@ -8,32 +8,39 @@ import java.io.PrintStream;
 
 public class Printer {
 
-    PrintStream printStream = new PrintStream(System.out);
+    PrintStream printStream;
     SimpleBoardPrinter boardPrinter;
 
     public Printer() {
+        this.printStream = new PrintStream(System.out);
         this.boardPrinter = new FancyBoardPrinter(printStream);
     }
 
     public void printGreeting() {
-        System.out.println("Welcome!");
-        System.out.println("\n" + "-------------------------------------");
-        System.out.println("             BATTLESHIP              ");
-        System.out.println("-------------------------------------" + "\n");
+        printStream.println("Welcome!");
+        printStream.println("\n" + "-------------------------------------");
+        printStream.println("             BATTLESHIP              ");
+        printStream.println("-------------------------------------" + "\n");
+        printStream.println("This is a two players battleship game.");
+        printStream.println("Default game type is human versus computer.");
+    }
+
+    public void printAddYourName() {
+        printStream.println("\nEnter your name!");
+    }
+
+    public void printAddYourOpponentName() {
+        printStream.println("\nEnter your opponent name if you want to play in PVP mode");
     }
 
     public void printGoodbye() {
-        System.out.println("\nGood bye!");
+        printStream.println("\nGood bye!");
     }
 
     public void printBoard(String stringBoard, int boardSize) {
         boardPrinter.print(stringBoard, boardSize);
     }
 
-    public void printFleet(String stringFleet) {
-        printStream.print("\nAvailable Crafts: ");
-        printStream.print(stringFleet + "\n");
-    }
 
     public void printMenuItem(String menuItem) {
         printStream.print(menuItem);
@@ -44,23 +51,40 @@ public class Printer {
         printStream.println(Colour.ANSI_RESET.getColourCode());
     }
 
-    public void printAddCraftInstruction(String playerName) {
-        printStream.println("\nExamples for valid adding formats: carrier\\car north\\n b 3. Case insensitive.");
-        printStream.println("Press Q\\q to quit to main menu.");
-        printStream.println(playerName + ", type your command: ");
-    }
-
     public void printSetInfo(String parameter, String value) {
         printStream.println(parameter + " set to " + value + ".");
+    }
+
+    public void printSettling() {
+        printStream.println("\n" + "-------------------------------------");
+        printStream.println("              Settling               ");
+        printStream.println("-------------------------------------" + "\n");
+    }
+
+    public void printSettlingInfo(String playerName) {
+        printStream.println("\n" + playerName + ", please settle down your fleet.");
+        printStream.println("Your board is: ");
+    }
+
+    public void printFleet(String stringFleet) {
+        printStream.print("\nAvailable Crafts: ");
+        printStream.print(stringFleet + "\n");
+    }
+
+    public void printAddCraftInstruction(String playerName) {
+        printStream.println("\nExamples for valid adding formats: carrier(car) north(n) b 3. Case insensitive.");
+        printStream.println("Press Q(q) to quit to main menu.");
+        printStream.println(playerName + ", type your command: ");
     }
 
     public void printAddingCraftsIsDone(String playerName) {
         printStream.println("\nThe fleet of " + playerName + " has been successfully settled down!");
     }
 
-    public void printSettlingInfo(String playerName) {
-        printStream.println("\n" + playerName + ", please settle down your fleet.");
-        printStream.println("Your board is: ");
+    public void printBattle() {
+        printStream.println("\n" + "-------------------------------------");
+        printStream.println("               Battle                ");
+        printStream.println("-------------------------------------" + "\n");
     }
 
     public void printShootingInfo(String currentPlayer) {
@@ -70,7 +94,7 @@ public class Printer {
 
     public void printShootInstruction(String playerName) {
         printStream.println("\nExamples for valid shot formats: b 3. Case insensitive.");
-        printStream.println("Press Q\\q to quit to main menu.");
+        printStream.println("Press Q(q) to quit to main menu.");
         printStream.println(playerName + ", type your command: ");
     }
 
@@ -78,21 +102,9 @@ public class Printer {
         printStream.println("\nCongratulations to " + playerName + ", she/he won!");
     }
 
-    public void printSettling() {
-        System.out.println("\n" + "-------------------------------------");
-        System.out.println("              Settling               ");
-        System.out.println("-------------------------------------" + "\n");
-    }
-
-    public void printBattle() {
-        System.out.println("\n" + "-------------------------------------");
-        System.out.println("               Battle                ");
-        System.out.println("-------------------------------------" + "\n");
-    }
-
     public void printGameOver() {
-        System.out.println("\n" + "-------------------------------------");
-        System.out.println("              Game Over              ");
-        System.out.println("-------------------------------------" + "\n");
+        printStream.println("\n" + "-------------------------------------");
+        printStream.println("              Game Over              ");
+        printStream.println("-------------------------------------" + "\n");
     }
 }

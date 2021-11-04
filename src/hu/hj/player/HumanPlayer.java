@@ -7,18 +7,19 @@ import hu.hj.craft.crafts.Craft;
 import hu.hj.director.command.AddCommand;
 import hu.hj.director.command.ShotCommand;
 import hu.hj.director.human.HumanPlayerController;
-import hu.hj.exceptions.coordinate.CoordinateAlreadyHitException;
-import hu.hj.exceptions.coordinate.CoordinateNextToAnotherException;
-import hu.hj.exceptions.coordinate.InvalidCoordinateException;
-import hu.hj.exceptions.coordinate.OccupiedCoordinateException;
+import hu.hj.exceptions.coordinate.*;
 import hu.hj.exceptions.io.*;
 
 import java.util.Optional;
 
 public class HumanPlayer extends Player {
 
+    public HumanPlayer(String name) {
+        this.name = name;
+    }
+
     @Override
-    public boolean addCraft() throws OccupiedCoordinateException, InvalidCoordinateException, CoordinateNextToAnotherException, CraftAlreadyAddedException, InvalidCraftNameException, InvalidAddCommandFormatException, InvalidOrientationException {
+    public boolean addCraft() throws CoordinateException, CraftAlreadyAddedException, InvalidCraftNameException, InvalidAddCommandFormatException, InvalidOrientationException {
         boolean craftIsAdded = false;
         Optional<AddCommand> optionalCommand = Optional.ofNullable(((HumanPlayerController) director).getNextCraftFromFleet(fleet));
         if (optionalCommand.isPresent()) {
@@ -34,7 +35,7 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    public boolean shoot(Board board) throws CoordinateAlreadyHitException, InvalidCoordinateException, InvalidShotCommandFormatException {
+    public boolean shoot(Board board) throws CoordinateException, InvalidShotCommandFormatException {
         boolean shotIsAdded = false;
         Optional<ShotCommand> optionalCommand = Optional.ofNullable(((HumanPlayerController) director).addNextShot());
         if (optionalCommand.isPresent()) {

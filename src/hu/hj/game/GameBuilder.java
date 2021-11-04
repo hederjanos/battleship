@@ -8,6 +8,8 @@ import hu.hj.playerbuilder.ComputerPlayerBuilder;
 import hu.hj.playerbuilder.HumanPlayerBuilder;
 import hu.hj.playerbuilder.PlayerBuilder;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class GameBuilder {
@@ -15,9 +17,21 @@ public class GameBuilder {
     private final PlayerBuilder[] playerBuilders = new PlayerBuilder[2];
     private GameType gameType;
 
-    public GameBuilder(GameType gameType) {
-        setPlayerBuilders(gameType);
+    public GameBuilder(GameType gameType, List<String> playerNames) {
+        setPlayerBuilders(gameType, playerNames);
         initializeDefaultSettings(gameType);
+    }
+
+    public void setPlayerBuilders(GameType gameType, List<String> playerNames) {
+        this.gameType = gameType;
+        if (gameType == GameType.PVP) {
+            for (int i = 0; i < playerBuilders.length; i++) {
+                playerBuilders[i] = new HumanPlayerBuilder(playerNames.get(i));
+            }
+        } else if (gameType == GameType.PVC) {
+            playerBuilders[0] = new HumanPlayerBuilder(playerNames.get(0));
+            playerBuilders[1] = new ComputerPlayerBuilder();
+        }
     }
 
     public void initializeDefaultSettings(GameType gameType) {
@@ -28,17 +42,6 @@ public class GameBuilder {
         }
     }
 
-    public void setPlayerBuilders(GameType gameType) {
-        this.gameType = gameType;
-        if (gameType == GameType.PVP) {
-            for (int i = 0; i < playerBuilders.length; i++) {
-                playerBuilders[i] = new HumanPlayerBuilder();
-            }
-        } else if (gameType == GameType.PVC) {
-            playerBuilders[0] = new HumanPlayerBuilder();
-            playerBuilders[1] = new ComputerPlayerBuilder();
-        }
-    }
 
     public void addBoard(BoardType boardType) {
         for (PlayerBuilder playerBuilder : playerBuilders) {
@@ -74,5 +77,9 @@ public class GameBuilder {
 
     public GameType getGameType() {
         return gameType;
+    }
+
+    public List<String> getPlayerNames() {
+        return Arrays.stream(playerBuilders).map(playerBuilder -> playerBuilder.getPlayer().getName()).toList();
     }
 }

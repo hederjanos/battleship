@@ -4,8 +4,6 @@ import hu.hj.board.Board;
 import hu.hj.constants.GameStatus;
 import hu.hj.craft.fleet.Fleet;
 import hu.hj.exceptions.BattleshipException;
-import hu.hj.exceptions.io.InvalidShotCommandFormatException;
-import hu.hj.player.HumanPlayer;
 import hu.hj.player.Player;
 
 public class Game {
@@ -24,8 +22,12 @@ public class Game {
         if (currentGameStatus == GameStatus.NOT_STARTED) {
             initializeBoards();
         }
-        battle();
-        close();
+        if (currentGameStatus == GameStatus.SETTLING) {
+            battle();
+        }
+        if (currentGameStatus == GameStatus.GAME_OVER) {
+            close();
+        }
     }
 
     private void initializeBoards() {
@@ -33,36 +35,28 @@ public class Game {
         printer.printSettling();
         for (int i = 0; i < players.length; i++) {
             currentPlayerIndex = i;
-            initializeBoard(players[i] instanceof HumanPlayer);
+            initializeBoard();
         }
         manageTurn();
     }
 
-    private void initializeBoard(boolean printerInAction) {
+    private void initializeBoard() {
         Player currentPlayer = getCurrentPlayer();
         Board board = currentPlayer.getBoard();
         Fleet fleet = currentPlayer.getFleet();
-        if (printerInAction) {
-            printer.printSettlingInfo(currentPlayer.getName());
-            printer.printBoard(board.toString(true), board.getSize());
-        }
+        printer.printSettlingInfo(currentPlayer.getName());
+        printer.printBoard(board.toString(true), board.getSize());
         while (!fleet.areAllCraftsAddedToBattlefield() && currentGameStatus == GameStatus.SETTLING) {
             try {
-                if (printerInAction) {
-                    printer.printFleet(fleet.toString(fleet.getAllNotAddedCrafts()));
-                    printer.printAddCraftInstruction(currentPlayer.getName());
-                }
+                printer.printFleet(fleet.toString(fleet.getAllNotAddedCrafts()));
+                printer.printAddCraftInstruction(currentPlayer.getName());
                 if (!currentPlayer.addCraft()) {
                     currentGameStatus = GameStatus.QUIT;
                     continue;
                 }
-                if (printerInAction) {
-                    printer.printBoard(board.toString(true), board.getSize());
-                }
+                printer.printBoard(board.toString(true), board.getSize());
             } catch (BattleshipException e) {
-                if (printerInAction) {
-                    printer.printExceptionMessage(e);
-                }
+                printer.printExceptionMessage(e);
             }
         }
         if (fleet.areAllCraftsAddedToBattlefield()) {
@@ -76,7 +70,7 @@ public class Game {
         do {
             try {
                 makeCurrentPlayerToShoot();
-            } catch (InvalidShotCommandFormatException e) {
+            } catch (BattleshipException e) {
                 printer.printExceptionMessage(e);
                 continue;
             }
@@ -96,25 +90,20 @@ public class Game {
         }
     }
 
-    private void makeCurrentPlayerToShoot() throws InvalidShotCommandFormatException {
+    private void makeCurrentPlayerToShoot() throws BattleshipException {
         Player currentPlayer = getCurrentPlayer();
         Board oppositeBoard = getOppositePlayer().getBoard();
         Fleet oppositeFleet = getOppositePlayer().getFleet();
-        try {
-            printer.printShootingInfo(currentPlayer.getName());
-            printer.printBoard(oppositeBoard.toString(false), oppositeBoard.getSize());
-            printer.printFleet(oppositeFleet.getAllExistingCrafts().toString());
-            printer.printShootInstruction(currentPlayer.getName());
-            if (!currentPlayer.shoot(oppositeBoard)) {
-                currentGameStatus = GameStatus.QUIT;
-            }
-            printer.printBoard(oppositeBoard.toString(false), oppositeBoard.getSize());
-        } catch (InvalidShotCommandFormatException e) {
-            throw new InvalidShotCommandFormatException(e.getMessage().split(" ")[1]);
-        } catch (BattleshipException e) {
-            printer.printExceptionMessage(e);
+        printer.printShootingInfo(currentPlayer.getName());
+        printer.printBoard(oppositeBoard.toString(false), oppositeBoard.getSize());
+        printer.printFleet(oppositeFleet.getAllExistingCrafts().toString());
+        printer.printShootInstruction(currentPlayer.getName());
+        if (!currentPlayer.shoot(oppositeBoard)) {
+            currentGameStatus = GameStatus.QUIT;
         }
+        printer.printBoard(oppositeBoard.toString(false), oppositeBoard.getSize());
     }
+
 
     private Player getCurrentPlayer() {
         return players[currentPlayerIndex];
@@ -125,10 +114,8 @@ public class Game {
     }
 
     private void close() {
-        if (currentGameStatus == GameStatus.GAME_OVER) {
-            printer.printBattle();
-            printer.printGameOver(getOppositePlayer().getName());
-        }
+        printer.printBattle();
+        printer.printGameOver(getOppositePlayer().getName());
     }
 
     public void setPrinter(Printer printer) {
@@ -139,4 +126,3 @@ public class Game {
         return currentGameStatus;
     }
 }
-
