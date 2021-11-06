@@ -1,6 +1,8 @@
 package hu.hj.game;
 
 import hu.hj.constants.*;
+import hu.hj.director.strategy.Strategy;
+import hu.hj.player.ComputerPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,15 +12,17 @@ public class MenuBuilder {
 
     private final Scanner scanner;
     private final Printer printer;
+    private final List<String> playerNames;
     private GameBuilder gameBuilder;
     private Game game;
 
-    public MenuBuilder(Scanner scanner, Printer printer) {
+    public MenuBuilder(Scanner scanner, Printer printer, List<String> playerNames) {
         this.scanner = scanner;
         this.printer = printer;
+        this.playerNames = playerNames;
     }
 
-    public MenuItem build(List<String> playerNames) {
+    public MenuItem build() {
 
         //___________________Main menu___________________
 
@@ -108,29 +112,49 @@ public class MenuBuilder {
     private void newGame(List<String> playerNames) {
         if (gameBuilder == null) {
             gameBuilder = new GameBuilder(GameType.PVC, playerNames);
-        } else {
-            gameBuilder = new GameBuilder(gameBuilder.getGameType(), gameBuilder.getPlayerNames());
+        } else if (game != null) {
+            refreshGameBuilderWithUserSettings(playerNames);
         }
-        runGame();
+        runNewGame();
+    }
+
+    private void refreshGameBuilderWithUserSettings(List<String> playerNames) {
+        GameBuilder newGameBuilder = new GameBuilder(GameType.PVC, playerNames);
+        newGameBuilder.addBoard(gameBuilder.getSecondPlayerBuilder().getPlayer().getBoard().getBoardType());
+        newGameBuilder.addFleet(gameBuilder.getSecondPlayerBuilder().getPlayer().getFleet().getFleetType());
+        if (gameBuilder.getSecondPlayerBuilder().getPlayer() instanceof ComputerPlayer) {
+            Strategy strategy = ((ComputerPlayer) gameBuilder.getSecondPlayerBuilder().getPlayer()).getStrategy();
+            gameBuilder.addStrategy(strategy.getDifficulty());
+        }
+        gameBuilder = newGameBuilder;
     }
 
     private void resumeGame() {
-        if (game != null && game.getCurrentGameStatus() == GameStatus.GAME_OVER) {
-            gameBuilder = new GameBuilder(gameBuilder.getGameType(), gameBuilder.getPlayerNames());
+        if (game == null) {
+            printer.printGameNotExist();
+        } else if (game.getCurrentGameStatus() == GameStatus.GAME_OVER) {
+            refreshGameBuilderWithUserSettings(playerNames);
+            runNewGame();
+        } else {
+            runExistingGame();
         }
-        runGame();
     }
 
+    private void runExistingGame() {
+        gameBuilder.addController(scanner);
+        game.setPrinter(printer);
+        game.run();
+    }
 
-    private void setUpGameType(GameType pvp, List<String> strings) {
-        gameBuilder.setPlayerBuilders(pvp, strings);
-        gameBuilder.initializeDefaultSettings(pvp);
+    private void setUpGameType(GameType gameType, List<String> playerNames) {
+        gameBuilder.setPlayerBuilders(gameType, playerNames);
+        gameBuilder.initializeDefaultSettings(gameType);
         printer.printSetInfo(gameBuilder.getGameType().getClass().getSimpleName(), gameBuilder.getGameType().getName());
     }
 
-    private void runGame() {
+    private void runNewGame() {
         gameBuilder.addController(scanner);
-        game = gameBuilder.getGame();
+        game = gameBuilder.buildGame();
         game.setPrinter(printer);
         game.run();
     }

@@ -1,13 +1,11 @@
 package hu.hj.board;
 
+import hu.hj.constants.BoardType;
 import hu.hj.constants.CraftStatus;
 import hu.hj.constants.ShotStatus;
 import hu.hj.coordinate.Coordinate;
 import hu.hj.craft.crafts.Craft;
-import hu.hj.exceptions.coordinate.CoordinateAlreadyHitException;
-import hu.hj.exceptions.coordinate.InvalidCoordinateException;
-import hu.hj.exceptions.coordinate.CoordinateNextToAnotherException;
-import hu.hj.exceptions.coordinate.OccupiedCoordinateException;
+import hu.hj.exceptions.coordinate.*;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,8 +20,6 @@ public class SimpleBoard implements Board {
     private final Map<Coordinate, Craft> battlefield;
     protected final Set<Coordinate> seenCoordinates;
     private final int size;
-    private int numberOfCrafts;
-    private int destroyedCrafts;
 
     public SimpleBoard() {
         this(10);
@@ -85,7 +81,6 @@ public class SimpleBoard implements Board {
         for (Coordinate coordinate : craftPossibleCoordinates) {
             battlefield.put(coordinate, craft);
         }
-        numberOfCrafts++;
     }
 
     public Craft getCraft(Coordinate coordinate) {
@@ -117,10 +112,13 @@ public class SimpleBoard implements Board {
         return craftNeighbourCoordinates;
     }
 
-    public ShotStatus hit(Coordinate coordinate) throws InvalidCoordinateException, CoordinateAlreadyHitException {
+    public ShotStatus hit(Coordinate coordinate) throws InvalidCoordinateException, CoordinateAlreadyHitException, CoordinateAlreadySeenException {
         ShotStatus shotStatus = ShotStatus.HIT;
         if (!checkCoordinate(coordinate)) {
             throw new InvalidCoordinateException(coordinate);
+        }
+        if (seenCoordinates.contains(coordinate)) {
+            throw new CoordinateAlreadySeenException(coordinate);
         }
         Craft craft = getCraft(coordinate);
         if (craft == null) {
@@ -129,7 +127,6 @@ public class SimpleBoard implements Board {
         } else {
             if (craft.hit(coordinate)) {
                 craft.setStatus(CraftStatus.HIT);
-                seenCoordinates.add(coordinate.copy());
                 if (craft.isShotDown()) {
                     revealCraftNeighbourhood(craft);
                     craft.setStatus(CraftStatus.DESTROYED);
@@ -147,19 +144,19 @@ public class SimpleBoard implements Board {
                 seenCoordinates.add(neighbourCoordinate);
             }
         }
-        destroyedCrafts++;
     }
 
     public boolean isSeen(Coordinate coordinate) {
         return seenCoordinates.contains(coordinate);
     }
 
-    public int getSize() {
-        return size;
+    @Override
+    public BoardType getBoardType() {
+        return BoardType.SIMPLE;
     }
 
-    public boolean areAllCraftsDestroyed() {
-        return numberOfCrafts == destroyedCrafts;
+    public int getSize() {
+        return size;
     }
 
     @Override

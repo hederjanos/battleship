@@ -1,6 +1,7 @@
 package hu.hj.craft.fleet;
 
 import hu.hj.constants.CraftStatus;
+import hu.hj.constants.FleetType;
 import hu.hj.craft.crafts.Craft;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public abstract class Fleet {
     public boolean areAllCraftsAddedToBattlefield() {
         boolean result = true;
         for (Craft craft : crafts) {
-            if (craft.getStatus() == null) {
+            if (craft.getStatus() == CraftStatus.NOT_ADDED) {
                 result = false;
                 break;
             }
@@ -43,7 +44,7 @@ public abstract class Fleet {
     public List<Craft> getAllNotAddedCrafts() {
         List<Craft> unPutCrafts = new ArrayList<>();
         for (Craft craft : crafts) {
-            if (craft.getStatus() == null) {
+            if (craft.getStatus() == CraftStatus.NOT_ADDED) {
                 unPutCrafts.add(craft);
             }
         }
@@ -60,6 +61,17 @@ public abstract class Fleet {
         return existingCrafts;
     }
 
+    public boolean isInFleetExistingCraft() {
+        boolean isAlive = false;
+        for (Craft craft : crafts) {
+            if (craft.getStatus() != CraftStatus.DESTROYED) {
+                isAlive = true;
+                break;
+            }
+        }
+        return isAlive;
+    }
+
     public String toString(List<Craft> crafts) {
         StringBuilder stringBuilder = new StringBuilder();
         for (Craft craft : crafts) {
@@ -68,4 +80,6 @@ public abstract class Fleet {
         stringBuilder.append("\n");
         return stringBuilder.toString();
     }
+
+    public abstract FleetType getFleetType();
 }

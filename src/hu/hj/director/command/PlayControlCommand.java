@@ -4,7 +4,7 @@ public abstract class PlayControlCommand {
 
     protected int[] coordinates;
 
-    protected PlayControlCommand(int[] coordinates) {
+    protected PlayControlCommand(int... coordinates) {
         this.coordinates = coordinates;
     }
 

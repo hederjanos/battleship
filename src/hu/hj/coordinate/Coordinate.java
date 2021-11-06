@@ -2,6 +2,7 @@ package hu.hj.coordinate;
 
 import hu.hj.constants.Direction;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
@@ -9,6 +10,7 @@ import java.util.Set;
 
 public class Coordinate implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private int x;
@@ -63,6 +65,19 @@ public class Coordinate implements Serializable {
         return adjacentCoordinates;
     }
 
+    public Set<Coordinate> getOrthogonalAdjacentCoordinates() {
+        Set<Coordinate> adjacentCoordinates = new HashSet<>();
+        Coordinate neighborCoordinate;
+        Direction[] directions = Direction.values();
+        for (int i = 0; i < 4; i++) {
+            neighborCoordinate = copy();
+            neighborCoordinate.setX(neighborCoordinate.getX() + directions[i].getX());
+            neighborCoordinate.setY(neighborCoordinate.getY() + directions[i].getY());
+            adjacentCoordinates.add(neighborCoordinate);
+        }
+        return adjacentCoordinates;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -78,7 +93,7 @@ public class Coordinate implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("(%d, %d)", x, y);
+        return String.format("(%s, %d)", (char) (x + 'a'), y + 1);
     }
 
     public int getX() {

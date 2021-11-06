@@ -19,8 +19,8 @@ import java.util.regex.Pattern;
 
 public class HumanPlayerControllerConsole implements HumanPlayerController {
 
-    private static final String ADD_CRAFT_REGEXP = "^[a-z]*[\\s][[a-z]]*[\\s][a-z][\\s][\\d]*$";
-    private static final String SHOT_REGEXP = "^[a-z]*[\\s][[\\d]]*$";
+    private static final String ADD_CRAFT_REGEXP = "^[a-z]*[\\s][a-z]*[\\s][a-z][\\s][\\d]*$";
+    private static final String SHOT_REGEXP = "^[a-z]*[\\s][\\d]*$";
     private static final char A = 'a';
     private static final String Q = "q";
     private final Scanner scanner;
@@ -90,9 +90,8 @@ public class HumanPlayerControllerConsole implements HumanPlayerController {
         }
         int xCoordinate = Character.codePointAt(commandParts[2].toCharArray(), 0) - A;
         int yCoordinate = Integer.parseInt(commandParts[3]) - 1;
-        int[] coordinates = new int[]{xCoordinate, yCoordinate};
 
-        return new AddCommand(craftName, orientationName, coordinates);
+        return new AddCommand(craftName, orientationName, xCoordinate, yCoordinate);
     }
 
     private String getCraftName(String input) {
@@ -136,8 +135,7 @@ public class HumanPlayerControllerConsole implements HumanPlayerController {
         String[] commandParts = input.split(" ");
         int xCoordinate = Character.codePointAt(commandParts[0].toCharArray(), 0) - A;
         int yCoordinate = Integer.parseInt(commandParts[1]) - 1;
-        int[] coordinates = new int[]{xCoordinate, yCoordinate};
-        return new ShotCommand(coordinates);
+        return new ShotCommand(xCoordinate, yCoordinate);
     }
 
     private void patternMatchesWithShotRule(String input) throws InvalidShotCommandFormatException {

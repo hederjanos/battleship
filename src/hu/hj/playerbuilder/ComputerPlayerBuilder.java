@@ -9,7 +9,7 @@ import hu.hj.player.ComputerPlayer;
 public class ComputerPlayerBuilder extends PlayerBuilder {
 
     public ComputerPlayerBuilder() {
-        player = new ComputerPlayer();
+        this.player = new ComputerPlayer();
     }
 
     public void addStrategy(Difficulty difficulty) {

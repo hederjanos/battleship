@@ -1,13 +1,15 @@
 package hu.hj.player;
 
 import hu.hj.board.Board;
+import hu.hj.constants.CraftStatus;
 import hu.hj.constants.Orientation;
+import hu.hj.constants.ShotStatus;
 import hu.hj.coordinate.CoordinateFactory;
 import hu.hj.craft.crafts.Craft;
 import hu.hj.director.command.AddCommand;
 import hu.hj.director.command.ShotCommand;
 import hu.hj.director.human.HumanPlayerController;
-import hu.hj.exceptions.coordinate.*;
+import hu.hj.exceptions.coordinate.CoordinateException;
 import hu.hj.exceptions.io.*;
 
 import java.util.Optional;
@@ -25,7 +27,7 @@ public class HumanPlayer extends Player {
         if (optionalCommand.isPresent()) {
             AddCommand command = optionalCommand.get();
             Craft craft = fleet.findCraft(command.getCraftName());
-            if (craft.getStatus() != null) {
+            if (craft.getStatus() != CraftStatus.NOT_ADDED) {
                 throw new CraftAlreadyAddedException(craft.toString());
             }
             craft.setOrientation(Orientation.valueOf(command.getOrientationName()));
@@ -35,15 +37,14 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    public boolean shoot(Board board) throws CoordinateException, InvalidShotCommandFormatException {
-        boolean shotIsAdded = false;
+    public ShotStatus shoot(Board board) throws CoordinateException, InvalidShotCommandFormatException {
+        ShotStatus shotStatus = null;
         Optional<ShotCommand> optionalCommand = Optional.ofNullable(((HumanPlayerController) director).addNextShot());
         if (optionalCommand.isPresent()) {
             ShotCommand command = optionalCommand.get();
-            board.hit(CoordinateFactory.createCoordinate(command.getCoordinates()));
-            shotIsAdded = true;
+            shotStatus = board.hit(CoordinateFactory.createCoordinate(command.getCoordinates()));
         }
-        return shotIsAdded;
+        return shotStatus;
     }
 
     public HumanPlayerController getController() {

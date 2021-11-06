@@ -7,7 +7,7 @@ import hu.hj.craft.crafts.ship.Cruiser;
 import hu.hj.craft.crafts.ship.Destroyer;
 import hu.hj.craft.fleet.StandardFleet;
 
-public class StandardFleetFactory extends FleetFactory {
+public class StandardFleetFactory implements FleetFactory {
 
     @Override
     public StandardFleet createFleet() {

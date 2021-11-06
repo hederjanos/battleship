@@ -1,9 +1,10 @@
 package hu.hj.board;
 
+import hu.hj.constants.BoardType;
 import hu.hj.constants.ShotStatus;
 import hu.hj.coordinate.Coordinate;
 import hu.hj.craft.crafts.Craft;
-import hu.hj.exceptions.coordinate.*;
+import hu.hj.exceptions.coordinate.CoordinateException;
 
 public interface Board {
 
@@ -13,11 +14,11 @@ public interface Board {
 
     ShotStatus hit(Coordinate coordinate) throws CoordinateException;
 
-    boolean areAllCraftsDestroyed();
-
     String toString(boolean unveil);
 
     int getSize();
 
     boolean isSeen(Coordinate coordinate);
+
+    BoardType getBoardType();
 }

@@ -20,7 +20,7 @@ public class Application {
     public void run() {
         printer.printGreeting();
         List<String> names = getPlayerNames();
-        MenuItem menu = new MenuBuilder(scanner, printer).build(names);
+        MenuItem menu = new MenuBuilder(scanner, printer, names).build();
         menu.run();
         boolean run = true;
         int actionNumber;
@@ -47,6 +47,7 @@ public class Application {
                 menu.run();
             }
         }
+        closeResources();
     }
 
     private List<String> getPlayerNames() {
@@ -54,7 +55,7 @@ public class Application {
         String playerName = scanner.nextLine();
         List<String> names = new ArrayList<>();
         names.add(playerName);
-        names.add("default");
+        names.add("defaultPlayer");
         return names;
     }
 
@@ -65,5 +66,10 @@ public class Application {
         } catch (NumberFormatException e) {
             throw new InvalidMenuPoint(menuPoint);
         }
+    }
+
+    private void closeResources() {
+        scanner.close();
+        printer.close();
     }
 }

@@ -2,27 +2,33 @@ package hu.hj.game;
 
 import hu.hj.board.Board;
 import hu.hj.constants.GameStatus;
+import hu.hj.constants.ShotStatus;
 import hu.hj.craft.fleet.Fleet;
 import hu.hj.exceptions.BattleshipException;
+import hu.hj.player.HumanPlayer;
 import hu.hj.player.Player;
 
 public class Game {
 
     private final Player[] players;
     private GameStatus currentGameStatus;
+    private boolean isPaused = false;
     private int currentPlayerIndex;
     private Printer printer;
 
     public Game(Player... players) {
         this.players = players;
-        currentGameStatus = GameStatus.NOT_STARTED;
+        this.currentGameStatus = GameStatus.SETTLING;
     }
 
     public void run() {
-        if (currentGameStatus == GameStatus.NOT_STARTED) {
-            initializeBoards();
+        if (isPaused) {
+            isPaused = false;
         }
         if (currentGameStatus == GameStatus.SETTLING) {
+            initializeBoards();
+        }
+        if (currentGameStatus == GameStatus.BATTLE) {
             battle();
         }
         if (currentGameStatus == GameStatus.GAME_OVER) {
@@ -31,30 +37,38 @@ public class Game {
     }
 
     private void initializeBoards() {
-        this.currentGameStatus = GameStatus.SETTLING;
         printer.printSettling();
         for (int i = 0; i < players.length; i++) {
-            currentPlayerIndex = i;
-            initializeBoard();
+            if (!isPaused) {
+                currentPlayerIndex = i;
+                initializeBoard(players[i] instanceof HumanPlayer);
+            }
         }
+        refreshGameStatus();
         manageTurn();
     }
 
-    private void initializeBoard() {
+    private void initializeBoard(boolean printerInAction) {
         Player currentPlayer = getCurrentPlayer();
         Board board = currentPlayer.getBoard();
         Fleet fleet = currentPlayer.getFleet();
-        printer.printSettlingInfo(currentPlayer.getName());
-        printer.printBoard(board.toString(true), board.getSize());
-        while (!fleet.areAllCraftsAddedToBattlefield() && currentGameStatus == GameStatus.SETTLING) {
+        if (printerInAction) {
+            printer.printSettlingInfo(currentPlayer.getName());
+            printer.printBoard(currentPlayer.getName(), board.toString(true), board.getSize());
+        }
+        while (!fleet.areAllCraftsAddedToBattlefield() && !isPaused) {
             try {
-                printer.printFleet(fleet.toString(fleet.getAllNotAddedCrafts()));
-                printer.printAddCraftInstruction(currentPlayer.getName());
+                if (printerInAction) {
+                    printer.printAvailableCrafts(fleet.toString(fleet.getAllNotAddedCrafts()));
+                    printer.printAddCraftInstruction(currentPlayer.getName());
+                }
                 if (!currentPlayer.addCraft()) {
-                    currentGameStatus = GameStatus.QUIT;
+                    isPaused = true;
                     continue;
                 }
-                printer.printBoard(board.toString(true), board.getSize());
+                if (printerInAction) {
+                    printer.printBoard(currentPlayer.getName(), board.toString(true), board.getSize());
+                }
             } catch (BattleshipException e) {
                 printer.printExceptionMessage(e);
             }
@@ -66,17 +80,17 @@ public class Game {
 
     private void battle() {
         printer.printBattle();
-        this.currentGameStatus = GameStatus.BATTLE;
-        do {
+        while (currentGameStatus != GameStatus.GAME_OVER && !isPaused) {
             try {
                 makeCurrentPlayerToShoot();
+                if (!isPaused) {
+                    manageTurn();
+                    refreshGameStatus();
+                }
             } catch (BattleshipException e) {
                 printer.printExceptionMessage(e);
-                continue;
             }
-            manageTurn();
-            refreshGameStatus();
-        } while (currentGameStatus == GameStatus.BATTLE);
+        }
     }
 
     private void manageTurn() {
@@ -84,8 +98,12 @@ public class Game {
     }
 
     private void refreshGameStatus() {
-        if (getCurrentPlayer().getBoard().areAllCraftsDestroyed()
-            || getOppositePlayer().getBoard().areAllCraftsDestroyed()) {
+        if (getCurrentPlayer().getFleet().areAllCraftsAddedToBattlefield()
+            && getOppositePlayer().getFleet().areAllCraftsAddedToBattlefield()) {
+            currentGameStatus = GameStatus.BATTLE;
+        }
+        if (!getCurrentPlayer().getFleet().isInFleetExistingCraft()
+            || !getOppositePlayer().getFleet().isInFleetExistingCraft()) {
             currentGameStatus = GameStatus.GAME_OVER;
         }
     }
@@ -94,16 +112,20 @@ public class Game {
         Player currentPlayer = getCurrentPlayer();
         Board oppositeBoard = getOppositePlayer().getBoard();
         Fleet oppositeFleet = getOppositePlayer().getFleet();
-        printer.printShootingInfo(currentPlayer.getName());
-        printer.printBoard(oppositeBoard.toString(false), oppositeBoard.getSize());
-        printer.printFleet(oppositeFleet.getAllExistingCrafts().toString());
-        printer.printShootInstruction(currentPlayer.getName());
-        if (!currentPlayer.shoot(oppositeBoard)) {
-            currentGameStatus = GameStatus.QUIT;
+        if (currentPlayer instanceof HumanPlayer) {
+            printer.printShootingInfo(currentPlayer.getName());
+            printer.printBoard(getOppositePlayer().getName(), oppositeBoard.toString(false), oppositeBoard.getSize());
+            printer.printExistingCrafts(oppositeFleet.getAllExistingCrafts().toString());
+            printer.printShootInstruction(currentPlayer.getName());
         }
-        printer.printBoard(oppositeBoard.toString(false), oppositeBoard.getSize());
+        ShotStatus shotStatus = currentPlayer.shoot(oppositeBoard);
+        if (shotStatus == null) {
+            isPaused = true;
+        } else {
+            printer.printBoard(getOppositePlayer().getName(), oppositeBoard.toString(false), oppositeBoard.getSize());
+            printer.printShotStatus(currentPlayer.getName(), shotStatus.toString());
+        }
     }
-
 
     private Player getCurrentPlayer() {
         return players[currentPlayerIndex];
@@ -114,7 +136,6 @@ public class Game {
     }
 
     private void close() {
-        printer.printBattle();
         printer.printGameOver(getOppositePlayer().getName());
     }
 

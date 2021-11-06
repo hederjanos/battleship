@@ -42,7 +42,6 @@ public class GameBuilder {
         }
     }
 
-
     public void addBoard(BoardType boardType) {
         for (PlayerBuilder playerBuilder : playerBuilders) {
             playerBuilder.addBoard(boardType);
@@ -71,7 +70,7 @@ public class GameBuilder {
         }
     }
 
-    public Game getGame() {
+    public Game buildGame() {
         return new Game(playerBuilders[0].getPlayer(), playerBuilders[1].getPlayer());
     }
 
@@ -81,5 +80,9 @@ public class GameBuilder {
 
     public List<String> getPlayerNames() {
         return Arrays.stream(playerBuilders).map(playerBuilder -> playerBuilder.getPlayer().getName()).toList();
+    }
+
+    public PlayerBuilder getSecondPlayerBuilder() {
+        return playerBuilders[1];
     }
 }

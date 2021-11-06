@@ -5,7 +5,7 @@ public class AddCommand extends PlayControlCommand {
     private final String craftName;
     private final String orientationName;
 
-    public AddCommand(String craftName, String orientationName, int[] coordinates) {
+    public AddCommand(String craftName, String orientationName, int... coordinates) {
         super(coordinates);
         this.craftName = craftName;
         this.orientationName = orientationName;

@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class HumanPlayerBuilder extends PlayerBuilder {
 
     public HumanPlayerBuilder(String name) {
-        player = new HumanPlayer(name);
+        this.player = new HumanPlayer(name);
     }
 
     public void addController(Scanner scanner) {

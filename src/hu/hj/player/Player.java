@@ -1,6 +1,7 @@
 package hu.hj.player;
 
 import hu.hj.board.Board;
+import hu.hj.constants.ShotStatus;
 import hu.hj.craft.fleet.Fleet;
 import hu.hj.craft.fleetfactory.FleetFactory;
 import hu.hj.director.Director;
@@ -46,6 +47,6 @@ public abstract class Player {
 
     public abstract boolean addCraft() throws BattleshipException;
 
-    public abstract boolean shoot(Board board) throws BattleshipException;
+    public abstract ShotStatus shoot(Board board) throws BattleshipException;
 
 }
