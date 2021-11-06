@@ -21,7 +21,7 @@ public abstract class Craft implements Serializable {
 
     protected Orientation orientation;
     protected Symbol symbol;
-    protected CraftStatus status;
+    protected CraftStatus status = CraftStatus.NOT_ADDED;
     protected int[][] shape;
     protected Coordinate internalAnchorCoordinate;
     protected Coordinate anchorCoordinate;

@@ -16,7 +16,7 @@ public class SimpleBoardStringBuilder {
                 Coordinate coordinate = CoordinateFactory.createCoordinate(j, i);
                 Craft craft = board.getCraft(coordinate);
                 if (unveil) {
-                    buildIfUnveil(board, coordinate, craft);
+                    buildIfUnveil(coordinate, craft);
                 } else {
                     buildIfNotUnveil(board, coordinate, craft);
                 }
@@ -24,12 +24,12 @@ public class SimpleBoardStringBuilder {
         }
     }
 
-    private void buildIfUnveil(Board board, Coordinate coordinate, Craft craft) {
+    private void buildIfUnveil(Coordinate coordinate, Craft craft) {
         if (craft != null) {
-            if (!board.isSeen(coordinate)) {
-                boardBuilder.append(craft.getSymbol().getMark());
-            } else {
+            if (craft.isHit(coordinate)) {
                 boardBuilder.append(Symbol.HIT.getMark());
+            } else {
+                boardBuilder.append(craft.getSymbol().getMark());
             }
         } else {
             boardBuilder.append(Symbol.WATER.getMark());
@@ -38,16 +38,16 @@ public class SimpleBoardStringBuilder {
 
     private void buildIfNotUnveil(Board board, Coordinate coordinate, Craft craft) {
         if (craft != null) {
-            if (!board.isSeen(coordinate)) {
-                boardBuilder.append(Symbol.WATER.getMark());
-            } else {
+            if (craft.isHit(coordinate)) {
                 boardBuilder.append(Symbol.HIT.getMark());
+            } else {
+                boardBuilder.append(Symbol.WATER.getMark());
             }
         } else {
-            if (!board.isSeen(coordinate)) {
-                boardBuilder.append(Symbol.WATER.getMark());
-            } else {
+            if (board.isSeen(coordinate)) {
                 boardBuilder.append(Symbol.SEEN.getMark());
+            } else {
+                boardBuilder.append(Symbol.WATER.getMark());
             }
         }
     }

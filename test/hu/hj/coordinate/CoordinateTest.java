@@ -69,6 +69,6 @@ class CoordinateTest {
     @Test
     void testToString() {
         Coordinate coordinate = new Coordinate(8, 9);
-        assertEquals("(8, 9)", coordinate.toString());
+        assertEquals("(i, 10)", coordinate.toString());
     }
 }
