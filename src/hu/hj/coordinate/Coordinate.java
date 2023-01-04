@@ -2,7 +2,6 @@ package hu.hj.coordinate;
 
 import hu.hj.constants.Direction;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
@@ -10,7 +9,6 @@ import java.util.Set;
 
 public class Coordinate implements Serializable {
 
-    @Serial
     private static final long serialVersionUID = 1L;
 
     private int x;
@@ -104,11 +102,11 @@ public class Coordinate implements Serializable {
         return y;
     }
 
-    public void setX(int x) {
+    private void setX(int x) {
         this.x = x;
     }
 
-    public void setY(int y) {
+    private void setY(int y) {
         this.y = y;
     }
 }

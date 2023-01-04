@@ -11,6 +11,7 @@ import hu.hj.playerbuilder.PlayerBuilder;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class GameBuilder {
 
@@ -79,7 +80,7 @@ public class GameBuilder {
     }
 
     public List<String> getPlayerNames() {
-        return Arrays.stream(playerBuilders).map(playerBuilder -> playerBuilder.getPlayer().getName()).toList();
+        return Arrays.stream(playerBuilders).map(playerBuilder -> playerBuilder.getPlayer().getName()).collect(Collectors.toList());
     }
 
     public PlayerBuilder getSecondPlayerBuilder() {
